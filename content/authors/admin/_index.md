@@ -62,4 +62,4 @@ user_groups:
 - Visitors
 ---
 
-Yo yo my name is Winnie the Bish and I'm here to tell yall what's up!
+I've spent my twenties exploring the world and different potential careers.  Through my work as a Peace Corps volunteer and as a young
