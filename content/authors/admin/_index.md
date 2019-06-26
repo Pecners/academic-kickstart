@@ -18,7 +18,7 @@ organizations:
   url: ""
 
 # Short bio (displayed in user profile at end of posts)
-bio: My passion is for adding value 
+bio: This is my bio.  There are many like it, but this one is mine. 
 
 interests:
 - R Development
