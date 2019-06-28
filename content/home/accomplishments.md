@@ -26,6 +26,16 @@ date_format = "Jan 2006"
   certificate_url = "https://www.datacamp.com/statement-of-accomplishment/track/d028b719613440ed2b873ea47e66b89ceef50077"
   date_start = "2018-12-01"
   date_end = "2019-05-19"
-  description = "Track entailed 22 courses that combined statistical and machine learning techniques with R programming to analyze and interpret data."
+  description = "Track entailed 22 courses (estimated 90+ hours) that combined statistical and machine learning techniques with R programming to analyze and interpret data."
+
+[[item]]
+  organization = "Indiana University Lilly Family School of Philanthropy"
+  organization_url = "https://philanthropy.iupui.edu/"
+  title = "Principles and Techniques of Fundraising"
+  url = "https://philanthropy.iupui.edu/professional-development/courses-seminars/the-fund-raising-school/principles-techniques-of-fundraising.html"
+  certificate_url = ""
+  date_start = "2016-09-06"
+  date_end = "2016-11-10"
+  description = "Foundational course in tried-and-true practical skills of effective fundraising."
 
 +++

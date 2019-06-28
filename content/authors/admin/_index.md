@@ -62,6 +62,8 @@ user_groups:
 - Visitors
 ---
 
-I’ve spent my twenties exploring the world and different potential careers. Through my work as a Peace Corps volunteer and as a young nonprofit professional in Milwaukee, I've had the opportunity to wear many different hats in a short period, gaining experience in agricultural and community development, fundraising, project/program management, grantmaking, and board governance consulting.  Through all of these roles, my aptitude and eagerness to work with data became more and more evident, until finally my organization decided to make data my official responsibility instead of a de facto task that took up most of my time.
+Hello!  I'm Spencer, and I'm a developing data scientist.  
 
-A year into this role now, I know I've found my vocation.  A natural introvert and consummate learner, I gain immense satisfaction from working independently with data to reach conclusions or gain insights, and then bringing that value back to the full team.  I also love having the opportunity to learn a new tool or technique--I'm self-taught in Salesforce (Certified Administrator), R programming, and Microsoft Power BI, the three tools I use to manage my organization's data needs.
+I've found my way to this work through an unconventional path--though a Political Science/French major in undergrad, my aptitude for analytics led me to be the de facto data analyst from the start of my professional career.  I'm now in a role dedicated to data management and analysis, and it has been in this capacity that I've pushed myself to bring the ever-more-attainable power of data science to my small organization here in Milwaukee.
+
+I count myself fortunate to have discovered a true passion the work I'm doing.  Data science offers me the opportunity to add value through creative and analytical problem-solving, as well as the opportunity to build the capacity of mission-driven organizations like nonprofits.
