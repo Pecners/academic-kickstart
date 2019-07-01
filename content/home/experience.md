@@ -24,13 +24,7 @@ date_format = "Jan 2006"
   location = "Matam Region, Senegal, West Africa"
   date_start = "2012-09-01"
   date_end = "2014-11-01"
-  description = """
-  Responsibilities include:
-  
-  * Analysing
-  * Modelling
-  * Deploying
-  """
+  description = """Worked with local farmers and gardeners to improve food security in the area through use of improved seed varieties and techniques."""
 
 [[experience]]
   title = "Manager of Data and Impact"
@@ -39,7 +33,7 @@ date_format = "Jan 2006"
   location = "Milwaukee, WI"
   date_start = "2018-07-01"
   date_end = ""
-  description = """Taught electronic engineering and researched semiconductor physics."""
+  description = """Led three work streams in the roles of Data Manager, Grantmaking Manager, and Salesforce Administrator. """
   
 [[experience]]
   title = "Program Director for Partner School Services"
@@ -48,7 +42,7 @@ date_format = "Jan 2006"
   location = "Milwaukee, WI"
   date_start = "2018-01-01"
   date_end = "2018-06-01"
-  description = """Taught electronic engineering and researched semiconductor physics."""
+  description = """Responsible for administering programs that impact schools across the PAVE network through three primary roles: Grantmaking Manager, Project Manager for the Pro Bono Partners, and School Liaison. """
   
 [[experience]]
   title = "Program Support Specialist"
@@ -57,6 +51,6 @@ date_format = "Jan 2006"
   location = "Milwaukee, WI"
   date_start = "2015-11-01"
   date_end = "2017-12-31"
-  description = """Taught electronic engineering and researched semiconductor physics."""
+  description = """Provided support for all organizational departments, especially strategic planning services, fundraising activities, and data analysis."""
 
 +++

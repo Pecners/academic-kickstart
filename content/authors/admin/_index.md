@@ -66,4 +66,4 @@ Hello!  I'm Spencer, and I'm a developing data scientist.
 
 I've found my way to this work through an unconventional path--though a Political Science/French major in undergrad, my aptitude for analytics led me to be the de facto data analyst from the start of my professional career.  I'm now in a role dedicated to data management and analysis, and it has been in this capacity that I've pushed myself to bring the ever-more-attainable power of data science to my small organization here in Milwaukee.
 
-I count myself fortunate to have discovered a true passion the work I'm doing.  Data science offers me the opportunity to add value through creative and analytical problem-solving, as well as the opportunity to build the capacity of mission-driven organizations like nonprofits.
+I count myself fortunate to have discovered a true passion the work I'm doing.  Data science offers me the opportunity to add value through creative and analytical problem-solving, as well as the opportunity to build the capacity of my team.
