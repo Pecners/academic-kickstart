@@ -17,9 +17,6 @@ image:
 projects: []
 ---
 
-```r
-knitr::opts_chunk$set(message=FALSE, warning=FALSE)
-```
 About a year ago in the fall of 2018, I stumbled across [data.milwaukee.gov](https://data.milwaukee.gov).  Suffice it to say, as a certified Data Nerd who  accesses publicly available data in both my day job and my free time, I was impressed with the quality of the resources being provided by a city the size of Milwaukee.  Maybe I'm easily impressed because I'm overly pessimistic about the capacity of our major cities, but we'll leave that for another time...
 
 At the time, I was only just beginning to tread water in the R pool, and I thought it would be a fun / instructive challenge to try to come up with an interesting visual representing crime in Milwaukee.  Specifically, I had a vision of facet wrapping a map of crimes in Milwaukee by some characteristic of the data.  And with this exceedingly vague sense of direction, I was off!
