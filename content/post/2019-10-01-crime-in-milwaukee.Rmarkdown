@@ -93,7 +93,7 @@ crime_neighb <- crime_neighb %>%
 crime_neighb <- st_intersection(neighb, crime_neighb)
 ```
 
-Whew, we're really sweating after those chunks!  I'm sure this still isn't optimized very well(I don't even want to know what `data.table` adherents would have to say), but it works!  Or at least, we think it will work.  There's only one way to know for sure, and that's to finally get to producing the map.
+Whew, we're really sweating after those chunks!  I'm sure this still isn't optimized very well (I don't even want to know what `data.table` adherents would have to say), but it works!  Or at least, we think it will work.  There's only one way to know for sure, and that's to finally get to producing the map.
 
 The final package we will need is the `tmap` package that follows the grammar of graphics and makes it fairly simple to produce highly customizable plots using spatial data.
 
@@ -101,10 +101,18 @@ The final package we will need is the `tmap` package that follows the grammar of
 library(tmap)
 
 # make the map ====
+
+# add the neighborhood data aesthetic
 tm_shape(neighb) +
+  # add polygon layer with borders set to transparent
+  # this plots the grey city outline
   tm_polygons(border.alpha = 0) +
+  # add the crime data aesthetic
 tm_shape(crime_neighb) +
+  # add dot layer with 0.5 alpha to show overlap
   tm_dots(col = "red", alpha = 0.5) +
+  # facet by our gathered `Crime` variable
+  # free.coords = FALSE keeps each facet the same zoom
 tm_facets(by = "Crime", free.coords = FALSE) +
 tm_layout(main.title = "Reported Crimes in Milwaukee, 2018")
 ```
