@@ -4,10 +4,10 @@ author: Spencer Schien
 date: '2019-10-02'
 slug: accident-tracking
 categories: []
-tags: []
-subtitle: ''
+tags: [R, Milwaukee Data]
+subtitle: "Assessing the effectiveness of MPD's recent intiative"
 summary: ''
-authors: []
+authors: [Spencer Schien]
 lastmod: '2019-10-02T18:38:03-05:00'
 featured: no
 image:
@@ -15,7 +15,131 @@ image:
   focal_point: ''
   preview_only: no
 projects: []
+reading_time: false
+share: false
+draft: true
 ---
+
 
 This past summer, the Milwaukee Journal Sentinel reported that the Milwaukee Police Department was undertaking an initiative to reduce traffic accidents in Milwaukee by deploying more units to high-risk areas.
 
+For our purposes here, we will make a determination based on whether there is a difference in the number of reported accidents during the period in question when compared to previous comparable periods.  
+
+*Note: The `milwaukeer` package developed by [John Johnson](https://johndjohnson.info) facilitates downloading this data and performing some of the data cleaning tasks I'm going to be covering below.  I've opted not to use the `milwaukeer` package here so I can more explicitly explain my process.*
+
+## Loading and Assessing the Data
+
+```r
+library(tidyverse)
+
+raw <- read_csv("https://data.milwaukee.gov/dataset/5fafe01d-dc55-4a41-8760-8ae52f7855f1/resource/8fffaa3a-b500-4561-8898-78a424bdacee/download/trafficaccident.csv")
+```
+
+Now that we have our data loaded into R, let's take a look at its structure.
+
+
+```r
+glimpse(raw)
+```
+
+```
+## Observations: 152,776
+## Variables: 3
+## $ CASENUMBER  <chr> "M5L08M7RHX", "J9L0K2BCG5", "M5L08M7RHW", "J9L0MB7DK…
+## $ CASEDATE    <dttm> 2019-10-02 18:59:00, 2019-10-02 17:53:00, 2019-10-0…
+## $ ACCIDENTLOC <chr> "W BELOIT RD - Highway NN", "S 93RD ST - Highway NN"…
+```
+
+With only three variables, this is a pretty simple dataset.  It would seem that `CASENUMBER` is a unique identifier, `CASEDATE` is a timestamp, and `ACCIDENTLOC` is a rough address of the accident.  The addresses are not in a plottable format, nor are they easily coerceable to a Coordinate Reference System (CRS), so effectively, this variable is useless for our purposes.
+
+It would seem to be a safe assumption that each observation represents a different accident report, in which case we could count each observation as an accident.  We need to be sure that there aren't duplicates, though, so lets take a look at this `CASENUMBER` variable.  
+
+If the difference between the number of observations in the data (obtained by using `nrow()`) and the number of unique `CASENUMBER`s is zero, then each observation is in fact a single accident.
+
+
+```r
+unique_cases <- length(
+  unique(raw$CASENUMBER)
+)
+
+nrow(raw) - unique_cases
+```
+
+```
+## [1] 10
+```
+
+What we find is that the dataset is 10 rows longer than the number of unique `CASENUMBER`s, so there are duplicates.  Let's take a look at these duplicates to figure out what is going on.
+
+
+```r
+duplicates <- raw %>%
+  group_by(CASENUMBER) %>%
+  summarise(total = n()) %>%
+  filter(total > 1)
+
+raw %>%
+  filter(CASENUMBER %in% duplicates$CASENUMBER) %>%
+  arrange(CASENUMBER)
+```
+
+```
+## # A tibble: 20 x 3
+##    CASENUMBER CASEDATE            ACCIDENTLOC                              
+##    <chr>      <dttm>              <chr>                                    
+##  1 9G7FQMQ    2007-09-16 06:57:00 4022 W OKLAHOMA AV - 100 Feet E of S 41S…
+##  2 9G7FQMQ    2007-09-16 06:57:00 4022 W OKLAHOMA AV - 100 Ft from [S 41ST…
+##  3 J9L086WD7H 2017-05-06 04:25:00 1815 N 17TH ST                           
+##  4 J9L086WD7H 2017-05-06 04:25:00 ON 1815 N 17TH ST227 FT S OF W VINE ST(H…
+##  5 J9L0CGFB0G 2017-03-30 02:52:00 W FOND DU LAC AV & W WALNUT ST - 439 Fee…
+##  6 J9L0CGFB0G NA                  *F* ON 1306 W FOND DU LAC AVE/ STH145 NB…
+##  7 J9L0CJWD7M 2017-04-23 11:40:00 S 6TH ST & W LINCOLN AV                  
+##  8 J9L0CJWD7M NA                  S 6TH ST & W LINCOLN AV                  
+##  9 J9L0CS9LVV 2017-04-09 14:59:00 4613 N 42ND ST - 143 Feet N of W COURTLA…
+## 10 J9L0CS9LVV NA                  4613 N 42ND ST - 143 Feet N of W COURTLA…
+## 11 J9L0GPZ7TC 2017-03-20 01:45:00 *F* ON 3433 W LINCOLN AVE65 FT E OF S 35…
+## 12 J9L0GPZ7TC 2017-03-20 01:45:00 S 35TH ST & W LINCOLN AV - 65 Feet E of …
+## 13 J9L0LS5WRF 2017-04-18 10:33:00 *F* INTERSECTION ON W OKLAHOMA AVEAT S 4…
+## 14 J9L0LS5WRF 2017-04-18 10:33:00 S 47TH ST & W OKLAHOMA AV                
+## 15 J9L0MFXHKW 2017-04-30 12:30:00 INTERSECTION ON W FOREST HOME AV/ STH24 …
+## 16 J9L0MFXHKW 2017-04-30 12:30:00 S 60TH ST & W FOREST HOME AV             
+## 17 J9L0WZH5K9 2017-04-28 23:00:00 *F* ON 5202 N TEUTONIA AVE, 0 FT N OF W …
+## 18 J9L0WZH5K9 2017-04-28 23:00:00 N TEUTONIA AV & W VILLARD AV - 0 Feet N …
+## 19 J9L15QT5KC 2017-05-13 22:20:00 S 13TH ST & W ARTHUR AV - 369 Feet N of …
+## 20 J9L15QT5KC NA                  S 13TH ST & W ARTHUR AV - 369 Feet N of …
+```
+
+It's clear that two things are happening here: first, there were some bad observations that were assigned a `CASENUMBER` without a `CASEDATE`, and second, there were observations that were entered twice with the exact same `CASENUMBER` AND `CASEDATE` but a different `ACCIDENTLOC`.  
+
+## Cleaning the Data
+
+This is definitely not a major issue since it's only ten duplicates out of 150,000 observations, but we can still take care of it in a couple easy steps.  
+
+First, since we aren't going to be using the `ACCIDENTLOC` field anyway, we don't care about having two different locations for the same accident.  Dropping that field, we can then call `unique()` on the dataset to eliminate the second case of duplicates listed above.  To eliminate the first case, we can simply filter out `NA` values since they aren't useful to us without a date anyway.  
+
+These steps are quickly achieved with a little `tidyverse` magic:
+
+
+```r
+clean <- raw %>%
+  filter(!is.na(CASEDATE)) %>%
+  select(-ACCIDENTLOC) %>%
+  unique()
+```
+
+Just to make sure we did what we wanted, we can rerun our code from earlier on our `clean` data, as follows:
+
+
+```r
+unique_clean <- length(
+  unique(clean$CASENUMBER)
+)
+
+nrow(clean) - unique_clean
+```
+
+```
+## [1] 0
+```
+
+Et voilà! Every row now represents a unique observation of an accident report.

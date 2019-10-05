@@ -4,10 +4,10 @@ author: Spencer Schien
 date: '2019-10-02'
 slug: accident-tracking
 categories: []
-tags: []
-subtitle: ''
+tags: [R, Milwaukee Data]
+subtitle: "Assessing the effectiveness of MPD's recent intiative"
 summary: ''
-authors: []
+authors: [Spencer Schien]
 lastmod: '2019-10-02T18:38:03-05:00'
 featured: no
 image:
@@ -15,7 +15,86 @@ image:
   focal_point: ''
   preview_only: no
 projects: []
+reading_time: false
+share: false
+draft: true
 ---
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(warning = FALSE, message = FALSE)
+```
 
 This past summer, the Milwaukee Journal Sentinel reported that the Milwaukee Police Department was undertaking an initiative to reduce traffic accidents in Milwaukee by deploying more units to high-risk areas.
 
+For our purposes here, we will make a determination based on whether there is a difference in the number of reported accidents during the period in question when compared to previous comparable periods.  
+
+*Note: The `milwaukeer` package developed by [John Johnson](https://johndjohnson.info) facilitates downloading this data and performing some of the data cleaning tasks I'm going to be covering below.  I've opted not to use the `milwaukeer` package here so I can more explicitly explain my process.*
+
+## Loading and Assessing the Data
+```{r}
+library(tidyverse)
+
+raw <- read_csv("https://data.milwaukee.gov/dataset/5fafe01d-dc55-4a41-8760-8ae52f7855f1/resource/8fffaa3a-b500-4561-8898-78a424bdacee/download/trafficaccident.csv")
+```
+
+Now that we have our data loaded into R, let's take a look at its structure.
+
+```{r}
+glimpse(raw)
+```
+
+With only three variables, this is a pretty simple dataset.  It would seem that `CASENUMBER` is a unique identifier, `CASEDATE` is a timestamp, and `ACCIDENTLOC` is a rough address of the accident.  The addresses are not in a plottable format, nor are they easily coerceable to a Coordinate Reference System (CRS), so effectively, this variable is useless for our purposes.
+
+It would seem to be a safe assumption that each observation represents a different accident report, in which case we could count each observation as an accident.  We need to be sure that there aren't duplicates, though, so lets take a look at this `CASENUMBER` variable.  
+
+If the difference between the number of observations in the data (obtained by using `nrow()`) and the number of unique `CASENUMBER`s is zero, then each observation is in fact a single accident.
+
+```{r}
+unique_cases <- length(
+  unique(raw$CASENUMBER)
+)
+
+nrow(raw) - unique_cases
+```
+
+What we find is that the dataset is 10 rows longer than the number of unique `CASENUMBER`s, so there are duplicates.  Let's take a look at these duplicates to figure out what is going on.
+
+```{r}
+duplicates <- raw %>%
+  group_by(CASENUMBER) %>%
+  summarise(total = n()) %>%
+  filter(total > 1)
+
+raw %>%
+  filter(CASENUMBER %in% duplicates$CASENUMBER) %>%
+  arrange(CASENUMBER)
+  
+```
+
+It's clear that two things are happening here: first, there were some bad observations that were assigned a `CASENUMBER` without a `CASEDATE`, and second, there were observations that were entered twice with the exact same `CASENUMBER` AND `CASEDATE` but a different `ACCIDENTLOC`.  
+
+## Cleaning the Data
+
+This is definitely not a major issue since it's only ten duplicates out of 150,000 observations, but we can still take care of it in a couple easy steps.  
+
+First, since we aren't going to be using the `ACCIDENTLOC` field anyway, we don't care about having two different locations for the same accident.  Dropping that field, we can then call `unique()` on the dataset to eliminate the second case of duplicates listed above.  To eliminate the first case, we can simply filter out `NA` values since they aren't useful to us without a date anyway.  
+
+These steps are quickly achieved with a little `tidyverse` magic:
+
+```{r}
+clean <- raw %>%
+  filter(!is.na(CASEDATE)) %>%
+  select(-ACCIDENTLOC) %>%
+  unique()
+```
+
+Just to make sure we did what we wanted, we can rerun our code from earlier on our `clean` data, as follows:
+
+```{r}
+unique_clean <- length(
+  unique(clean$CASENUMBER)
+)
+
+nrow(clean) - unique_clean
+```
+
+Et voilà! Every row now represents a unique observation of an accident report.

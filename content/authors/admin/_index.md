@@ -15,7 +15,7 @@ role: Manager of Data and Impact
 # Organizations/Affiliations
 organizations:
 - name: City Forward Collective
-  url: ""
+  url: "https://www.cityforwardcollective.org/"
 
 # Short bio (displayed in user profile at end of posts)
 bio: This is my bio.  There are many like it, but this one is mine. 

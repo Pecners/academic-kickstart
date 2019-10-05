@@ -3,11 +3,11 @@ title: Mapping Crime in Milwaukee
 author: Spencer Schien
 date: '2019-10-01'
 slug: crime-in-milwaukee
-categories: []
-tags: []
+categories: [Mapping]
+tags: [R, Milwaukee Data]
 subtitle: ''
 summary: ''
-authors: []
+authors: [Spencer Schien]
 lastmod: '2019-10-01T21:03:26-05:00'
 featured: no
 image:
@@ -15,6 +15,9 @@ image:
   focal_point: ''
   preview_only: no
 projects: []
+share: false
+reading_time: false
+commentable: true
 ---
 
 About a year ago in the fall of 2018, I stumbled across [data.milwaukee.gov](https://data.milwaukee.gov).  Suffice it to say, as a certified Data Nerd who  accesses publicly available data in both my day job and my free time, I was impressed with the quality of the resources being provided by a city the size of Milwaukee.  Maybe I'm easily impressed because I'm overly pessimistic about the capacity of our major cities, but we'll leave that for another time...
