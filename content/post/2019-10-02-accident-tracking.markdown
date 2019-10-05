@@ -17,7 +17,7 @@ image:
 projects: []
 reading_time: false
 share: false
-draft: true
+draft: false
 ---
 
 
@@ -29,13 +29,15 @@ For our purposes here, we will make a determination based on whether there is a 
 
 ## Loading and Assessing the Data
 
+First things first, we need to get the data into R.
+
 ```r
 library(tidyverse)
 
 raw <- read_csv("https://data.milwaukee.gov/dataset/5fafe01d-dc55-4a41-8760-8ae52f7855f1/resource/8fffaa3a-b500-4561-8898-78a424bdacee/download/trafficaccident.csv")
 ```
 
-Now that we have our data loaded into R, let's take a look at its structure.
+Now that we have our data loaded, let's take a look at its structure.
 
 
 ```r
@@ -43,11 +45,11 @@ glimpse(raw)
 ```
 
 ```
-## Observations: 152,776
+## Observations: 152,830
 ## Variables: 3
-## $ CASENUMBER  <chr> "M5L08M7RHX", "J9L0K2BCG5", "M5L08M7RHW", "J9L0MB7DK…
-## $ CASEDATE    <dttm> 2019-10-02 18:59:00, 2019-10-02 17:53:00, 2019-10-0…
-## $ ACCIDENTLOC <chr> "W BELOIT RD - Highway NN", "S 93RD ST - Highway NN"…
+## $ CASENUMBER  <chr> "M5L08M7RJ3", "M5L0DT5JNQ", "J9L0MB7DK8", "J9L0LG9M5…
+## $ CASEDATE    <dttm> 2019-10-03 19:37:00, 2019-10-03 19:10:00, 2019-10-0…
+## $ ACCIDENTLOC <chr> "S 68TH ST & W CLEVELAND AV", "N 35TH ST & W MARION …
 ```
 
 With only three variables, this is a pretty simple dataset.  It would seem that `CASENUMBER` is a unique identifier, `CASEDATE` is a timestamp, and `ACCIDENTLOC` is a rough address of the accident.  The addresses are not in a plottable format, nor are they easily coerceable to a Coordinate Reference System (CRS), so effectively, this variable is useless for our purposes.
@@ -143,3 +145,68 @@ nrow(clean) - unique_clean
 ```
 
 Et voilà! Every row now represents a unique observation of an accident report.
+
+Next, we are going to want to explore trends over the time, and we're going to want to look at it a few different ways.  For instance, we will definitely want to determine what time of day is most accident-prone, what time of year, etc.  This could easily be achieved with the data as it is, but we will want to have some grouping variables to help with sorting and comparison.
+
+The code below creates new fields for `year` and `rush_hour`.  Also, we will load the `lubridate` package to ease our work with datetime data.
+
+
+```r
+library(lubridate)
+
+labeled <- clean %>%
+  mutate(year = year(CASEDATE),
+         rush_hour = ifelse(hour(CASEDATE) > 7 & hour(CASEDATE) < 9, "Morning",
+                            ifelse(hour(CASEDATE) > 16 & hour(CASEDATE) < 18, "Evening",
+                                   "Not Rush Hour")))
+```
+
+Alright, it's time to get to the good stuff--let's visualize this bad boy.  First, let's take a look at daily total accidents over time.
+
+
+```r
+d_hist_v <-labeled %>%
+  group_by(day = floor_date(CASEDATE, "day")) %>%
+  summarise(total = n()) %>%
+  ggplot(aes(day, total)) +
+  geom_histogram(stat = "identity")
+d_hist_v
+```
+
+<img src="/post/2019-10-02-accident-tracking_files/figure-html/unnamed-chunk-8-1.png" width="672" />
+
+I like to assign my visuals with a name ending in `_v` so I can easily search them--this can be super helpful on larger projects where you are creating a lot of visuals.
+
+I also like to format my visuals beyond the `ggplot` defaults, as with the code below:
+
+
+```r
+d_hist_v +
+  theme_minimal() +
+  labs(x ="", y= "Daily Count of Accidents", title = "Milwaukee Traffic Accident Reports")
+```
+
+<img src="/post/2019-10-02-accident-tracking_files/figure-html/unnamed-chunk-9-1.png" width="672" />
+
+There seems to be positive trend in the number of accident reports, and there also seem to be a few pretty extreme spikes, but the histogram bars are so thin that it's difficult to make out.  
+
+Plotting with `geom_point` makes it easier to identify individual data points, and it will make it a little easier ot evaluate general trends.  We can also add a trend line using `geom_smooth`.
+
+```r
+d_point_v <-labeled %>%
+  group_by(day = floor_date(CASEDATE, "day")) %>%
+  summarise(total = n()) %>%
+  ggplot(aes(day, total)) +
+  # set alpha below 1 to show overplotting
+  geom_point(alpha = 0.5) +
+  geom_smooth(se = FALSE, color = "red") +
+  # geom_smooth will extend below zero if we don't set limits
+  scale_y_continuous(limits = c(0, 130)) +
+  theme_minimal() +
+  labs(x ="", y = "Daily Count of Accidents", title = "Milwaukee Traffic Accident Reports")
+d_point_v
+```
+
+<img src="/post/2019-10-02-accident-tracking_files/figure-html/unnamed-chunk-10-1.png" width="672" />
+
+More to come...

@@ -17,7 +17,7 @@ image:
 projects: []
 reading_time: false
 share: false
-draft: true
+draft: false
 ---
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(warning = FALSE, message = FALSE)
@@ -30,13 +30,15 @@ For our purposes here, we will make a determination based on whether there is a 
 *Note: The `milwaukeer` package developed by [John Johnson](https://johndjohnson.info) facilitates downloading this data and performing some of the data cleaning tasks I'm going to be covering below.  I've opted not to use the `milwaukeer` package here so I can more explicitly explain my process.*
 
 ## Loading and Assessing the Data
+
+First things first, we need to get the data into R.
 ```{r}
 library(tidyverse)
 
 raw <- read_csv("https://data.milwaukee.gov/dataset/5fafe01d-dc55-4a41-8760-8ae52f7855f1/resource/8fffaa3a-b500-4561-8898-78a424bdacee/download/trafficaccident.csv")
 ```
 
-Now that we have our data loaded into R, let's take a look at its structure.
+Now that we have our data loaded, let's take a look at its structure.
 
 ```{r}
 glimpse(raw)
@@ -98,3 +100,58 @@ nrow(clean) - unique_clean
 ```
 
 Et voilà! Every row now represents a unique observation of an accident report.
+
+Next, we are going to want to explore trends over the time, and we're going to want to look at it a few different ways.  For instance, we will definitely want to determine what time of day is most accident-prone, what time of year, etc.  This could easily be achieved with the data as it is, but we will want to have some grouping variables to help with sorting and comparison.
+
+The code below creates new fields for `year` and `rush_hour`.  Also, we will load the `lubridate` package to ease our work with datetime data.
+
+```{r}
+library(lubridate)
+
+labeled <- clean %>%
+  mutate(year = year(CASEDATE),
+         rush_hour = ifelse(hour(CASEDATE) > 7 & hour(CASEDATE) < 9, "Morning",
+                            ifelse(hour(CASEDATE) > 16 & hour(CASEDATE) < 18, "Evening",
+                                   "Not Rush Hour")))
+```
+
+Alright, it's time to get to the good stuff--let's visualize this bad boy.  First, let's take a look at daily total accidents over time.
+
+```{r}
+d_hist_v <-labeled %>%
+  group_by(day = floor_date(CASEDATE, "day")) %>%
+  summarise(total = n()) %>%
+  ggplot(aes(day, total)) +
+  geom_histogram(stat = "identity")
+d_hist_v
+```
+
+I like to assign my visuals with a name ending in `_v` so I can easily search them--this can be super helpful on larger projects where you are creating a lot of visuals.
+
+I also like to format my visuals beyond the `ggplot` defaults, as with the code below:
+
+```{r}
+d_hist_v +
+  theme_minimal() +
+  labs(x ="", y= "Daily Count of Accidents", title = "Milwaukee Traffic Accident Reports")
+```
+
+There seems to be positive trend in the number of accident reports, and there also seem to be a few pretty extreme spikes, but the histogram bars are so thin that it's difficult to make out.  
+
+Plotting with `geom_point` makes it easier to identify individual data points, and it will make it a little easier ot evaluate general trends.  We can also add a trend line using `geom_smooth`.
+```{r}
+d_point_v <-labeled %>%
+  group_by(day = floor_date(CASEDATE, "day")) %>%
+  summarise(total = n()) %>%
+  ggplot(aes(day, total)) +
+  # set alpha below 1 to show overplotting
+  geom_point(alpha = 0.5) +
+  geom_smooth(se = FALSE, color = "red") +
+  # geom_smooth will extend below zero if we don't set limits
+  scale_y_continuous(limits = c(0, 130)) +
+  theme_minimal() +
+  labs(x ="", y = "Daily Count of Accidents", title = "Milwaukee Traffic Accident Reports")
+d_point_v
+```
+
+More to come...
