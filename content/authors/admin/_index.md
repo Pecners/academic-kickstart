@@ -14,7 +14,7 @@ role: Manager of Data and Impact
 
 # Organizations/Affiliations
 organizations:
-- name: PAVE + STCM
+- name: City Forward Collective
   url: ""
 
 # Short bio (displayed in user profile at end of posts)
@@ -62,7 +62,7 @@ user_groups:
 - Visitors
 ---
 
-Hello!  I'm Spencer, and I'm an aspiring data scientist.  
+Hello!  I'm Spencer, and I love data.  
 
 I've found my way to this work through an unconventional path--though a Political Science/French major in undergrad, my aptitude for analytics led me to be the de facto data analyst from the start of my professional career.  I'm now in a role dedicated to data management and analysis, and it has been in this capacity that I've pushed myself to bring the ever-more-attainable power of data science to my small organization here in Milwaukee.
 

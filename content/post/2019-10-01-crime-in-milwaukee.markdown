@@ -21,7 +21,7 @@ About a year ago in the fall of 2018, I stumbled across [data.milwaukee.gov](htt
 
 At the time, I was only just beginning to tread water in the R pool, and I thought it would be a fun / instructive challenge to try to come up with an interesting visual representing crime in Milwaukee.  Specifically, I had a vision of facet wrapping a map of crimes in Milwaukee by some characteristic of the data.  And with this exceedingly vague sense of direction, I was off!
 
-## Accessessing the Data
+## Accessing the Data
 
 The first step is getting the data into R.  The code below will read the crime data in `.csv` format provided on the data portal.
 
@@ -39,7 +39,7 @@ crime <- read_csv("https://data.milwaukee.gov/dataset/e5feaad3-ee73-418c-b65d-ef
 
 ## Preparing Data for Visualization
 
-Now that we have the data loaded into R, we can use the glimpse function to get a snapshop of the fields present in the data.  
+Now that we have the data loaded into R, we can use the glimpse function to get a snapshot of the fields present in the data.
 
 
 ```r
@@ -75,9 +75,9 @@ glimpse(crime)
 ## $ VehicleTheft     <dbl> 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0,…
 ```
 
-Given my stated intention of creating a faceted map, the first set of fields I'm looking for are those that provide some sort of location information, and as luck would have it, the city provides this data in the form of `RoughX` and `RoughY`.  Without coordinates, the only way I knew to obtain plottable coordinates was to access the Google API and retrieve lat-long from physical addresss.  Google's API sets a limit, though, and at nearly 700K observations, this data exceeded that limit.  If that was the route I had to take, it would have complicated the process.
+Given my stated intention of creating a faceted map, the first set of fields I'm looking for are those that provide some sort of location information, and as luck would have it, the city provides this data in the form of `RoughX` and `RoughY`.  Without coordinates, the only way I knew to obtain plottable coordinates was to access the Google API and retrieve lat-long from physical address.  Google's API sets a limit, though, and at nearly 700K observations, this data exceeded that limit.  If that was the route I had to take, it would have complicated the process.
 
-Since we are fortunate enough to already have the coordinates, our next step is to coerce the data into a simple features object using the `sf` package.  The greatest difficulty I had with this step was determining what *Cordinate Reference System* the city was using to plot these crimes--little did I know that the `sf` package also has a function (`st_crs`) to handle this task in a single line of code.  So I'll just consider the weeks (yes, this held me up for weeks until a kind user on reddit pointed me in the right direction) I spent stuck on this chunk as a very hard earned lesson.
+Since we are fortunate enough to already have the coordinates, our next step is to coerce the data into a simple features object using the `sf` package.  The greatest difficulty I had with this step was determining what *Coordinate Reference System* the city was using to plot these crimes--little did I know that the `sf` package also has a function (`st_crs`) to handle this task in a single line of code.  So I'll just consider the weeks (yes, this held me up for weeks until a kind user on Reddit pointed me in the right direction) I spent stuck on this chunk as a very hard earned lesson.
 
 
 
@@ -91,7 +91,7 @@ crime_location <- crime %>%
   st_as_sf(coords = c("RoughX", "RoughY"), crs = 32054)
 ```
 
-Now we have our crime data converted to a simple features object.  If we want to map onto some representation of the city of Milwaukee--which we do--we need to also import those shapefiles and align everything to the same CRS.  
+Now we have our crime data converted to a simple features object.  If we want to map onto some representation of the city of Milwaukee--which we do--we need to also import those shapefiles and align everything to the same CRS.
 
 ```r
 # Shapefiles can be found online
@@ -106,9 +106,9 @@ crime_neighb <- st_transform(crime_location, crs = st_crs(neighb))
 
 And just like that, we have all the data we need in a simple features format!  We just need to shift gears here and do a bit a ordinary data tidying.
 
-With our stated goal of faceting by a certain characteristic, one immediately evident possibility is to choose the type of crime as the facet variable.  In order to facet a plot by the type of crime, though, we will need to bring all of the crimes under a single variable, as each separate crime is currently under a wide dummie format.  
+With our stated goal of faceting by a certain characteristic, one immediately evident possibility is to choose the type of crime as the facet variable.  In order to facet a plot by the type of crime, though, we will need to bring all of the crimes under a single variable, as each separate crime is currently under a wide dummie format.
 
-To clean this up, I chose to follow the `tidyverse` conventions and use `gather()`.  I also filtered the data to only include the year 2018--this is both to reduce overplotting of points, and to ease the data manipulation.
+To clean this up, I chose to follow the `tidyverse` conventions and use `gather()`.  I also filtered the data to only include the year 2018--this is both to reduce over plotting of points, and to ease the data manipulation.
 
 **These next few chunks can be a bit processor-heavy and take a while to run.**
 
@@ -151,6 +151,6 @@ tm_layout(main.title = "Reported Crimes in Milwaukee, 2018")
 
 <img src="/post/2019-10-01-crime-in-milwaukee_files/figure-html/unnamed-chunk-7-1.png" width="672" />
 
-And there we have it!  As I've tried to intimate throughout this post, I recognize that this might not be the optimal or most rigorous project of its kind, but I hope it is an instructive example for rapid prototyping from concept to minimal deliverable.  
+And there we have it!  As I've tried to intimate throughout this post, I recognize that this might not be the optimal or most rigorous project of its kind, but I hope it is an instructive example for rapid prototyping from concept to minimal deliverable.
 
 Any questions, comments, or suggestions are welcome--just shoot me an email.
