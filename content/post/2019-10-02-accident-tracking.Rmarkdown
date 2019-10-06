@@ -1,16 +1,16 @@
 ---
-title: "Accident Tracking"
+title: "Milwaukee Traffic Accident Tracking"
 author: Spencer Schien
 date: '2019-10-02'
 slug: accident-tracking
-categories: []
+categories: [Milwaukee Traffic Accidents]
 tags: [R, Milwaukee Data]
-subtitle: "Assessing the effectiveness of MPD's recent intiative"
+subtitle: "#1: Loading and Cleaning the Data"
 summary: ''
 authors: [Spencer Schien]
 lastmod: '2019-10-02T18:38:03-05:00'
 featured: no
-image:
+image: 
   caption: ''
   focal_point: ''
   preview_only: no
@@ -144,10 +144,14 @@ d_point_v <-labeled %>%
   group_by(day = floor_date(CASEDATE, "day")) %>%
   summarise(total = n()) %>%
   ggplot(aes(day, total)) +
+  
   # set alpha below 1 to show overplotting
+  
   geom_point(alpha = 0.5) +
   geom_smooth(se = FALSE, color = "red") +
+  
   # geom_smooth will extend below zero if we don't set limits
+  
   scale_y_continuous(limits = c(0, 130)) +
   theme_minimal() +
   labs(x ="", y = "Daily Count of Accidents", title = "Milwaukee Traffic Accident Reports")
