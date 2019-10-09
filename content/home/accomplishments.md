@@ -36,7 +36,7 @@ date_format = "Jan 2006"
   certificate_url = "https://trailhead.salesforce.com/credentials/verification"
   date_start = "2019-02-01"
   date_end = ""
-  description = "Use my legal first name verify this credential.  Search *Jonathan Schien*."
+  description = "Use my legal first name (i.e. search *Jonathan Schien*) to verify this credential"
 
 [[item]]
   organization = "Indiana University Lilly Family School of Philanthropy"
