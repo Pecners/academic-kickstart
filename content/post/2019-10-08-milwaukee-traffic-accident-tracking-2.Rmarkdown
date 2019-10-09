@@ -1,0 +1,66 @@
+---
+title: 'Milwaukee Traffic Accident Tracking #2'
+author: Spencer Schien
+date: '2019-10-08'
+slug: milwaukee-traffic-accident-tracking-2
+categories:
+  - Milwaukee Traffic Accidents
+tags:
+  - R
+  - Milwaukee Data
+subtitle: ''
+summary: ''
+authors: ["admin"]
+lastmod: '2019-10-08T19:23:44-05:00'
+featured: no
+image:
+  caption: ''
+  focal_point: ''
+  preview_only: no
+projects: []
+reading_time: false
+share: false
+draft: true
+commentable: true
+---
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(warning = FALSE, message = FALSE)
+```
+
+In my [last post](<https://spencerschien.info/post/accident-tracking/>), we loaded the traffic accident report data into R, we started cleaning it, and we visualized the data as follows:
+
+```{r echo=FALSE}
+library(lubridate)
+library(tidyverse)
+
+raw <- read_csv("https://data.milwaukee.gov/dataset/5fafe01d-dc55-4a41-8760-8ae52f7855f1/resource/8fffaa3a-b500-4561-8898-78a424bdacee/download/trafficaccident.csv")
+
+clean <- raw %>%
+  filter(!is.na(CASEDATE)) %>%
+  select(-ACCIDENTLOC) %>%
+  unique()
+
+labeled <- clean %>%
+  mutate(year = year(CASEDATE),
+         rush_hour = ifelse(hour(CASEDATE) > 7 & hour(CASEDATE) < 9, "Morning",
+                            ifelse(hour(CASEDATE) > 16 & hour(CASEDATE) < 18, "Evening",
+                                   "Not Rush Hour")))
+d_point_v <-labeled %>%
+  group_by(day = floor_date(CASEDATE, "day")) %>%
+  summarise(total = n()) %>%
+  ggplot(aes(day, total)) +
+  
+  # set alpha below 1 to show overplotting
+  
+  geom_point(alpha = 0.5) +
+  geom_smooth(se = FALSE, color = "red", size = 0.5) +
+  
+  # geom_smooth will extend below zero if we don't set limits
+  
+  scale_y_continuous(limits = c(0, 130)) +
+  theme_minimal() +
+  labs(x ="", y = "Daily Count of Accidents", title = "Milwaukee Traffic Accident Reports",
+       subtitle = "Each point represents a daily total")
+d_point_v
+```
+

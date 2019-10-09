@@ -1,13 +1,13 @@
 ---
-title: "Milwaukee Traffic Accident Tracking"
+title: "Milwaukee Traffic Accident Tracking #1"
 author: Spencer Schien
 date: '2019-10-02'
 slug: accident-tracking
 categories: [Milwaukee Traffic Accidents]
 tags: [R, Milwaukee Data]
-subtitle: "#1: Loading and Cleaning the Data"
+subtitle: "Loading and Cleaning the Data"
 summary: ''
-authors: [Spencer Schien]
+authors: ["admin"]
 lastmod: '2019-10-02T18:38:03-05:00'
 featured: no
 image: 
@@ -18,6 +18,7 @@ projects: []
 reading_time: false
 share: false
 draft: false
+commentable: true
 ---
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(warning = FALSE, message = FALSE)
@@ -25,7 +26,9 @@ knitr::opts_chunk$set(warning = FALSE, message = FALSE)
 
 This past summer, the Milwaukee Journal Sentinel reported that the Milwaukee Police Department was undertaking an initiative to reduce traffic accidents in Milwaukee by deploying more units to high-risk areas.
 
-For our purposes here, we will make a determination based on whether there is a difference in the number of reported accidents during the period in question when compared to previous comparable periods.  
+To the data nerds out there (oh, hi!), this was a great opportunity to set up a small project to track the success of MPD's initiative.  For our purposes here, we will make a determination as to whether MPD is having an impact based on whether there is a difference in the number of reported accidents during the period in question when compared to previous comparable periods.
+
+We can further evaluate whether any subgroups of the data showed any change (e.g. was there a decrease in accident reports during rush hour?) and whether weather (homonym!) shows any predictive value.
 
 *Note: The `milwaukeer` package developed by [John Johnson](https://johndjohnson.info) facilitates downloading this data and performing some of the data cleaning tasks I'm going to be covering below.  I've opted not to use the `milwaukeer` package here so I can more explicitly explain my process.*
 
