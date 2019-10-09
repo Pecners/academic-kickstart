@@ -45,11 +45,11 @@ glimpse(raw)
 ```
 
 ```
-## Observations: 152,830
+## Observations: 152,871
 ## Variables: 3
-## $ CASENUMBER  <chr> "M5L08M7RJ3", "M5L0DT5JNQ", "J9L0MB7DK8", "J9L0LG9M5…
-## $ CASEDATE    <dttm> 2019-10-03 19:37:00, 2019-10-03 19:10:00, 2019-10-0…
-## $ ACCIDENTLOC <chr> "S 68TH ST & W CLEVELAND AV", "N 35TH ST & W MARION …
+## $ CASENUMBER  <chr> "J9L040ZLWS", "06L22XVN0B", "J9L0K2BCG7", "J9L0K2BCG…
+## $ CASEDATE    <dttm> 2019-10-05 21:15:00, 2019-10-05 19:30:00, 2019-10-0…
+## $ ACCIDENTLOC <chr> "W KEEFE AV & N TEUTONIA AV", "Location not reported…
 ```
 
 With only three variables, this is a pretty simple dataset.  It would seem that `CASENUMBER` is a unique identifier, `CASEDATE` is a timestamp, and `ACCIDENTLOC` is a rough address of the accident.  The addresses are not in a plottable format, nor are they easily coerceable to a Coordinate Reference System (CRS), so effectively, this variable is useless for our purposes.
@@ -201,13 +201,14 @@ d_point_v <-labeled %>%
   # set alpha below 1 to show overplotting
   
   geom_point(alpha = 0.5) +
-  geom_smooth(se = FALSE, color = "red") +
+  geom_smooth(se = FALSE, color = "red", size = 0.5) +
   
   # geom_smooth will extend below zero if we don't set limits
   
   scale_y_continuous(limits = c(0, 130)) +
   theme_minimal() +
-  labs(x ="", y = "Daily Count of Accidents", title = "Milwaukee Traffic Accident Reports")
+  labs(x ="", y = "Daily Count of Accidents", title = "Milwaukee Traffic Accident Reports",
+       subtitle = "Each point represents a daily total")
 d_point_v
 ```
 
