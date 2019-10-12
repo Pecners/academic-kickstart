@@ -196,6 +196,11 @@ There seems to be positive trend in the number of accident reports, and there al
 Plotting with `geom_point` makes it easier to identify individual data points, and it will make it a little easier ot evaluate general trends.  We can also add a trend line using `geom_smooth`.
 
 ```r
+max_label <- labeled %>%
+              group_by(day = floor_date(CASEDATE, "day")) %>%
+              summarise(total = n()) %>%
+              filter(total == max(total))
+
 d_point_v <-labeled %>%
   group_by(day = floor_date(CASEDATE, "day")) %>%
   summarise(total = n()) %>%
@@ -204,6 +209,8 @@ d_point_v <-labeled %>%
   # set alpha below 1 to show overplotting
   
   geom_point(alpha = 0.5) +
+  geom_text(data = max_label,
+            aes(label = format(date(day), "%b %d, %Y"), y = total, x = day), nudge_y = 7) +
   geom_smooth(se = FALSE, color = "red", size = 0.5) +
   
   # geom_smooth will extend below zero if we don't set limits
