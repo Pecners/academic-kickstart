@@ -29,3 +29,4 @@ In my [last post](<https://spencerschien.info/post/accident-tracking/>), we load
 
 <img src="/post/2019-10-08-milwaukee-traffic-accident-tracking-2_files/figure-html/unnamed-chunk-1-1.png" width="672" />
 
+<img src="/post/2019-10-08-milwaukee-traffic-accident-tracking-2_files/figure-html/unnamed-chunk-2-1.png" width="672" /><img src="/post/2019-10-08-milwaukee-traffic-accident-tracking-2_files/figure-html/unnamed-chunk-2-2.png" width="672" /><img src="/post/2019-10-08-milwaukee-traffic-accident-tracking-2_files/figure-html/unnamed-chunk-2-3.png" width="672" /><img src="/post/2019-10-08-milwaukee-traffic-accident-tracking-2_files/figure-html/unnamed-chunk-2-4.png" width="672" />

@@ -24,7 +24,7 @@ draft: true
 commentable: true
 ---
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(warning = FALSE, message = FALSE)
+knitr::opts_chunk$set(warning = FALSE, message = FALSE, echo = FALSE)
 ```
 
 In my [last post](<https://spencerschien.info/post/accident-tracking/>), we loaded the traffic accident report data into R, we started cleaning it, and we visualized the data as follows:
@@ -64,3 +64,42 @@ d_point_v <-labeled %>%
 d_point_v
 ```
 
+```{r}
+months <- labeled %>%
+  mutate(month = month(CASEDATE)) %>%
+  group_by(month, year) %>%
+  summarise(total = n())
+
+days <- labeled %>%
+  mutate(day = day(CASEDATE)) %>%
+  group_by(day, year) %>%
+  summarise(total = n())
+
+hours <- labeled %>%
+  mutate(hour = hour(CASEDATE)) %>%
+  group_by(hour, year) %>%
+  summarise(total = n())
+
+months %>%
+  filter(year > 2016) %>%
+  ggplot(aes(month, total, color = factor(year))) +
+  geom_line() +
+  theme_minimal()
+
+months %>%
+  ggplot(aes(year, total)) +
+  geom_histogram(stat = "identity") +
+  theme_minimal()
+
+days %>%
+  filter(year > 2016) %>%
+  ggplot(aes(day, total)) +
+  geom_histogram(stat = "identity") +
+  theme_minimal()
+
+hours %>%
+  ggplot(aes(hour, total)) +
+  geom_histogram(stat = "identity") +
+  theme_minimal()
+
+```

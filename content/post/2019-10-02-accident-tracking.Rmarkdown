@@ -158,7 +158,8 @@ d_point_v <-labeled %>%
   scale_y_continuous(limits = c(0, 130)) +
   theme_minimal() +
   labs(x ="", y = "Daily Count of Accidents", title = "Milwaukee Traffic Accident Reports",
-       subtitle = "Each point represents a daily total")
+       subtitle = "Each point represents a daily total",
+       caption = "Source: data.milwaukee.gov.")
 d_point_v
 ```
 

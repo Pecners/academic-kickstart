@@ -48,11 +48,11 @@ glimpse(raw)
 ```
 
 ```
-## Observations: 152,871
+## Observations: 153,210
 ## Variables: 3
-## $ CASENUMBER  <chr> "J9L040ZLWS", "06L22XVN0B", "J9L0K2BCG7", "J9L0K2BCG…
-## $ CASEDATE    <dttm> 2019-10-05 21:15:00, 2019-10-05 19:30:00, 2019-10-0…
-## $ ACCIDENTLOC <chr> "W KEEFE AV & N TEUTONIA AV", "Location not reported…
+## $ CASENUMBER  <chr> "J9L0FMV99M", "J9L0JDKRRQ", "J9L0MRSSN3", "J9L07RB15…
+## $ CASEDATE    <dttm> 2019-10-11 11:10:00, 2019-10-10 15:30:00, 2019-10-1…
+## $ ACCIDENTLOC <chr> "N 74TH ST & W RUBY AV", "S KINNICKINNIC AV & E OKLA…
 ```
 
 With only three variables, this is a pretty simple dataset.  It would seem that `CASENUMBER` is a unique identifier, `CASEDATE` is a timestamp, and `ACCIDENTLOC` is a rough address of the accident.  The addresses are not in a plottable format, nor are they easily coerceable to a Coordinate Reference System (CRS), so effectively, this variable is useless for our purposes.
@@ -211,7 +211,8 @@ d_point_v <-labeled %>%
   scale_y_continuous(limits = c(0, 130)) +
   theme_minimal() +
   labs(x ="", y = "Daily Count of Accidents", title = "Milwaukee Traffic Accident Reports",
-       subtitle = "Each point represents a daily total")
+       subtitle = "Each point represents a daily total",
+       caption = "Source: data.milwaukee.gov.")
 d_point_v
 ```
 
