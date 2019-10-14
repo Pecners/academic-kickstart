@@ -8,7 +8,7 @@ categories:
 tags:
   - R
 subtitle: ''
-summary: ''
+summary: 'Description of the problem.'
 authors: []
 lastmod: '2019-10-14T11:05:03-05:00'
 featured: no
@@ -17,13 +17,17 @@ image:
   focal_point: ''
   preview_only: no
 projects: []
+reading_time: false
+share: false
+draft: false
+commentable: true
 ---
 
 # The Problem
 
 In my role of Manager of Data and Impact at a K-12 support organization in Milwaukee, I am constantly having to access publicly available school data.  Most commonly, I need the following information:
 
-* Lists of schools, especially of subgrounpings (i.e. high schools, elementary schools, charter schools, etc.)
+* Lists of schools, especially of subgroupings (e.g. high schools, elementary schools, charter schools, etc.)
 * Enrollment and demographic information of students served by those schools
 * Outcome data such as student test scores, graduation rates, etc.
 
@@ -35,7 +39,7 @@ A part of the solution is to adopt a workflow that documents all the steps in th
 
 When I was doing this work as the de facto data manager a few years ago, I had no formal training or guidance.  I was doing everything in Excel, summarizing, pivoting, and calculating new sheets off existing sheets (I had zero coding knowledge at this point, and didn't know VBA).  When I accepted a role dedicated to Data Management, my first task was to set up dashboards in Power BI.  This elevated my game a bit, as Power BI necessitated an understanding of relational tables.  Intuitively, I started to develop a database, though I didn't know it at the time.
 
-My problem at this point became scalability.  I had folders of .csv files downloaded from state websites that contained data on school enrollment, test scores, etc.  I had Power BI set up to process the data, but as I added more files, the processing became more and more computationally expensive.  At its height, it was taking my work computer 45 minutes to make edits. *(I should note here that I wasn't working with a top-of-the-line machine, but in any case, the situation became untenable.)*
+My problem at this point became scalability.  I had folders of `.csv` files downloaded from state websites that contained data on school enrollment, test scores, etc.  I had Power BI set up to process the data, but as I added more files, the processing became more and more computationally expensive.  At its height, it was taking my work computer 45 minutes to make edits. *(I should note here that I wasn't working with a top-of-the-line machine, but in any case, the situation became untenable.)*
 
 It was around this time that I had started learning R, and as I became more proficient, I moved more and more of my work into R Studio.  The performance compared to anything Excel or Power BI, the ease of scripting, and the availability of resources to learn on my own what I needed to know made R an ideal tool for my work.  Oh, and it helped that everything I just mentioned was free.
 
