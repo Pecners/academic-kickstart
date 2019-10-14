@@ -21,7 +21,7 @@ projects: []
 
 # The Problem
 
-In my role of Manager of Data and Impact at a K-12 support oganization in Milwaukee, I am constantly having to access publicly available school data.  Most commonly, I need the following information:
+In my role of Manager of Data and Impact at a K-12 support organization in Milwaukee, I am constantly having to access publicly available school data.  Most commonly, I need the following information:
 
 * Lists of schools, especially of subgrounpings (i.e. high schools, elementary schools, charter schools, etc.)
 * Enrollment and demographic information of students served by those schools
@@ -37,11 +37,11 @@ When I was doing this work as the de facto data manager a few years ago, I had n
 
 My problem at this point became scalability.  I had folders of .csv files downloaded from state websites that contained data on school enrollment, test scores, etc.  I had Power BI set up to process the data, but as I added more files, the processing became more and more computationally expensive.  At its height, it was taking my work computer 45 minutes to make edits. *(I should note here that I wasn't working with a top-of-the-line machine, but in any case, the situation became untenable.)*
 
-It was around this time that I had started learning R, and as I became more proficient, I moved more and more of my work into RStudio.  The performance compared to anything Excel or Power BI, the ease of scripting, and the availability of resources to learn on my own what I needed to know made R an ideal tool for my work.  Oh, and it helped that everything I just mentioned was free.
+It was around this time that I had started learning R, and as I became more proficient, I moved more and more of my work into R Studio.  The performance compared to anything Excel or Power BI, the ease of scripting, and the availability of resources to learn on my own what I needed to know made R an ideal tool for my work.  Oh, and it helped that everything I just mentioned was free.
 
 # My SolutionR
 
-It wasn't too long before I learned how to connect to a database with R, not only to access data, but also to write data.  So of course, this is when I came to the relization that I could use R to automate of the data cleaning in a consistent manner, and then I could write that data to a database.  The final hurdle was deciding what kind of database and where to host it.
+It wasn't too long before I learned how to connect to a database with R, not only to access data, but also to write data.  So of course, this is when I came to the realization that I could use R to automate of the data cleaning in a consistent manner, and then I could write that data to a database.  The final hurdle was deciding what kind of database and where to host it.
 
 I won't get too in-depth here, but suffice it to say that in the end I decided a true hosted database was too much of a back-end commitment.  Also, at least for the near-term, I wanted a database that could easily be edited, updated, and totally rewritten if necessary because I knew it would take me a bit of trial and error before I reached a truly stable state.
 
@@ -58,7 +58,7 @@ Before the IT hawks swoop down and peck my eyes out for not setting up a SQL Ser
 * The database is contained within a single file, making it low-maintenance, portable, and easily rewritten if necessary
 * The investment is almost nil, both in terms of set-up/management as well as dollars and cents
 
-I view this database as in the alpha stage of development.  I am still testing through my own analysis and occassionally delete the whole database and rewrite it with updated scripts that tidy the data in a way that better facilitates the analysis.
+I view this database as in the alpha stage of development.  I am still testing through my own analysis and occasionally delete the whole database and rewrite it with updated scripts that tidy the data in a way that better facilitates the analysis.
 
 # Conclusion
 
