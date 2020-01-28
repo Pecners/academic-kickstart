@@ -101,31 +101,46 @@ What we've omitted so far is any analysis to aid us in choosing *k*, the number 
 
 Two popular methods for determining the number of clusters to choose (when unkown, as in our case) are the *Elbow Method* and the *Average Silhouette Method*.  
 
-## Elbow Method
+### Elbow Method
 
-The elbow method is based on the total within-cluster sum of squares (WSS). Total WSS is a measure of variance within each cluster -- put another way, it's a measure of the distance between the actual observations in each cluster and the cluster center.  With the elbow method, we are looking to minimize the total WSS, meaning observations are as close to group averages as possible.
+The elbow method is based on the total within-cluster sum of squares (WSS). Total WSS is a measure of variance within each cluster -- put another way, it's a measure of the distance between the actual observations in each cluster and the cluster center.  The higher the total WSS, the less close to center, or less alike, observations within a cluster are with each other. Therefore, we are looking to minimize the total WSS, meaning observations are as close to group averages as possible.
 
 The `kmeans()` function will actually provide the total WSS as an output, so we can employ some functional programming to evaluate *k* values between one and ten.
 
 ```{r}
 # Elbow Analysis
+# Map over k values 1:10
 
 tot_withinss <- map_dbl(1:10, function(k) {
   model = kmeans(x = dist_demo, centers = k)
   model$tot.withinss
 })
 
+# Create df with WSS values for each iteration
+
 elbow_df <- data.frame(
   k = 1:10,
   tot_withinss = tot_withinss
 )
+
+# Plot WSS values for each value of k
 
 elbow_df %>%
   ggplot(aes(k, tot_withinss)) +
   geom_line() +
   scale_x_continuous(breaks = 2:10) +
   labs(title = "Elbow Method: Total Within-Cluster Sum of Square")
+```
 
+The elbow we are looking for is located at 3 clusters -- this elbow tells us that adding another cluster does not decrease the total WSS much more.
+
+### Average Silhouette Method
+
+The second method we will use to evaluate the number of clusters is the average silhouette method.  Whereas the total WSS evaluates intra-cluster validity, the average sihouette will tell us how well each observation fits its assigned cluster than its next closest cluster.
+
+Much the same way we calculated the total WSS above with the elbow method, the code below will calculate and visualize the average silhouette.
+
+```{r}
 
 # Silhouette Analysis
 library(cluster)
@@ -144,21 +159,48 @@ sil_df %>%
   geom_line() +
   scale_x_continuous(breaks = 2:10) +
   labs(title = "Average Silhouette Method")
+```
 
+Whereas with the elbow method we were trying to minimize the total WSS, here we are aiming to maximize the silhouette width.  As the visual above portrays, the maximum value is found at `k = 4`, but `k = 3` is a close second.
+
+Since the elbow method drew us to `k = 3` and the silhouette method showed us that `k = 3` is very close to the maximum silhouette value, we will choose to set the number of clusters at 3.
+
+## Clustering the Schools
+
+Now that we have determined *k*, we can go ahead and actually group the schools into clusters.  As we saw above, the code to implement the *k*-means algorithm is actually quite simple, as shown below.
+
+```{r}
 # Final Clustering with 3 Clusters
 
 k_clust <- kmeans(dist_demo, centers = 3)
+
+```
+
+We have created `k_clust`, which is a *kmeans* class object.  If we examine the structure of this object, we see that it is actually a list, the first element of which is an integer vector designating the cluster of the observation and indexed the same as our original dataframe.  This means we can join it with our dataframe so we can evaluate which schools fall within which cluster.
+
+```{r}
+# Create variable `cluster` to designate the cluster
+# Don't forget to filter for the correct school year
+# to match that data we clustered
 
 ach_clustered <- mke_rc %>%
   filter(school_year == "2018-19") %>%
   mutate(cluster = as_factor(k_clust$cluster))
 
+# Calculate the number of schools in each cluster
+
 n_demo <- ach_clustered %>%
   group_by(cluster) %>%
   summarise(N = n())
+
+# Calculate summary statistics for each cluster
 
 c_demo <- ach_clustered %>%
   group_by(cluster) %>%
   summarise_at(vars(per_am_in:per_lep, overall_score, sch_ach, sch_growth), .funs = mean, na.rm = TRUE) %>%
   modify_at(vars(per_am_in:per_lep), scales::percent)
+
+
+c_demo %>%
+  knitr::kable(booktabs = T)
 ```
