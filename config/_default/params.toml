@@ -29,7 +29,7 @@ logo = ""
 highlight = true
 # highlight_languages = ["r"]  # Add support for highlighting additional languages
 # highlight_style = "github"  # For supported styles, see https://cdnjs.com/libraries/highlight.js/
-
+hightlight_style = "solarized-dark"
 # Enable global LaTeX math rendering?
 #   If false, you can enable it locally on a per page basis.
 math = false
@@ -119,6 +119,27 @@ docs_section_pager = true  # Display pager in Docs layout (e.g. tutorials)?
 
 # Enable in-built social sharing buttons? (true/false)
 sharing = true
+
+# Comments.
+[comments]
+  # Comment provider:
+  #   0: Disabled
+  #   1: Disqus (https://disqus.com)
+  #   2: Commento (https://commento.io)
+  engine = 2
+
+  # Which page types are commentable?
+  commentable = {page = true, post = true, docs = true}
+
+    # Configuration of Disqus.
+  [comments.disqus]
+    shortname = ""  # Paste the shortname from your Disqus dashboard.
+    show_count = true  # Show comment count in page header? (true/false)
+
+  # Configuration of Commento.
+  [comments.commento]
+    # If self-hosting Commento, enter its URL here (e.g. "https://commento.?.com"), otherwise leave empty.
+    url = "https://cdn.commento.io/js/commento.js"
 
 # Configuration of publication pages.
 [publications]

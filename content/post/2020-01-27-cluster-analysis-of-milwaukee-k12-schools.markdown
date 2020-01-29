@@ -24,12 +24,7 @@ share: false
 draft: false
 commentable: true
 ---
-```{r setup, include = FALSE}
-knitr::opts_chunk$set(
-  warning = FALSE, 
-  message = FALSE
-  ) 
-```
+
 # Introduction
 
 Let's say you're doing an analysis of K12 schools, and you want to group schools based on the student populations they serve.  One way to accomplish this task is to use the *k-means clustering algorithm* to group schools into a perdefined (i.e. *k*) number of groups or clusters.
@@ -42,7 +37,8 @@ Let's say you're doing an analysis of K12 schools, and you want to group schools
 
 For this post, I will be using data made publicly available through the Wisconsin School Report Cards.  I have pre-processed this data in into an R package called *wisconsink12*, and it can be downloaded from GitHub with the following code:
 
-```{r eval=FALSE}
+
+```r
 # Use devtools to install from GitHub
 
 devtools::install_github("cityforwardcollective/wisconsink12")
@@ -52,7 +48,8 @@ More information on accessing data in this package can be found on the package's
 
 Once the package is loaded, we have access to several tables and functions to process those tables into commonly-needed formats.  The code below will prepare a dataframe suitable for our purposes.
 
-```{r}
+
+```r
 set.seed(1234) # Set seed to ensure reproducibility
 
 library(tidyverse)  # I'll use this package for data processing
@@ -70,7 +67,6 @@ demo_rc <- mke_rc %>%
          starts_with("per"),  # Select student demographic variables
          -c(per_choice, per_open)) %>% # Drop % Choice and % Open Enrollment
   filter(school_year == "2018-19")
-
 ```
 
 We now have a dataframe `demo_rc` that contains variables for the school year, a unique identifier for the school, and the race/ethnicity, economic status, disability status, and English proficiency status of the student body.  All of the student-descriptive variables are represented as proportions of the whole, the same as a percentage divided by 100.  We will be grouping the schools based on these variables.
@@ -81,7 +77,8 @@ Now that we have our data loaded, we can turn towards the actual process of impl
 
 Simply stated, the *k*-means algorithm will calculate the distance of an observation's variable from a cluster center.  In terms of this analysis, an observation would be a school, and a variable would be any of those student body charactistics, such as percent of economically disadvantaged students.  All of these variables are ratios of one, but if the variance and spread of the variables is not the same, then a variable with the most variance will have more influence than a variable with little variance.  To mitigate this effect, we will first scale the data.
 
-```{r}
+
+```r
 # scale() will scale our data
 
 scaled_demo <- scale(demo_rc[3:10])
@@ -89,7 +86,8 @@ scaled_demo <- scale(demo_rc[3:10])
 
 Now that the data is scaled, we can perform the first step in clustering, which is calculating a distance object that will be used by the clustering algorithm.
 
-```{r}
+
+```r
 # dist() wills calculate dist object
 
 dist_demo <- dist(scaled_demo)
@@ -109,7 +107,8 @@ The elbow method is based on the total within-cluster sum of squares (WSS). Tota
 
 The `kmeans()` function will actually provide the total WSS as an output, so we can employ some functional programming to evaluate *k* values between one and ten.
 
-```{r}
+
+```r
 # Elbow Analysis
 # Map over k values 1:10
 
@@ -134,6 +133,8 @@ elbow_df %>%
   labs(title = "Elbow Method: Total Within-Cluster Sum of Square")
 ```
 
+<img src="/post/2020-01-27-cluster-analysis-of-milwaukee-k12-schools_files/figure-html/unnamed-chunk-5-1.png" width="672" />
+
 The elbow we are looking for is located at 3 clusters -- this elbow tells us that adding another cluster does not decrease the total WSS much more.
 
 ### Average Silhouette Method
@@ -142,8 +143,8 @@ The second method we will use to evaluate the number of clusters is the average 
 
 Much the same way we calculated the total WSS above with the elbow method, the code below will calculate and visualize the average silhouette.
 
-```{r}
 
+```r
 # Silhouette Analysis
 library(cluster)
 
@@ -163,6 +164,8 @@ sil_df %>%
   labs(title = "Average Silhouette Method")
 ```
 
+<img src="/post/2020-01-27-cluster-analysis-of-milwaukee-k12-schools_files/figure-html/unnamed-chunk-6-1.png" width="672" />
+
 Whereas with the elbow method we were trying to minimize the total WSS, here we are aiming to maximize the silhouette width.  As the visual above portrays, the maximum value is found at `k = 4`, but `k = 3` is a close second.
 
 Since the elbow method drew us to `k = 3` and the silhouette method showed us that `k = 3` is very close to the maximum silhouette value, we will choose to set the number of clusters at 3.
@@ -171,18 +174,19 @@ Since the elbow method drew us to `k = 3` and the silhouette method showed us th
 
 Now that we have determined *k*, we can go ahead and actually group the schools into clusters.  As we saw above, the code to implement the *k*-means algorithm is actually quite simple, as shown below.
 
-```{r}
+
+```r
 # Final Clustering with 3 Clusters
 
 k_clust <- kmeans(dist_demo, centers = 3)
-
 ```
 
 We have created `k_clust`, which is a *kmeans* class object.  If we examine the structure of this object, we see that it is actually a list, the first element of which is an integer vector designating the cluster of the observation and indexed the same as our original dataframe.  This means we can join it with our dataframe so we can evaluate which schools fall within which cluster.
 
 The code below will add a `cluster` variable to our dataframe of schools, and then it will summarise the student body demographic variables and the Report Card score variables.
 
-```{r}
+
+```r
 # Create variable `cluster` to designate the cluster
 # Don't forget to filter for the correct school year
 # to match that data we clustered
@@ -208,7 +212,8 @@ c_demo <- ach_clustered %>%
 
 With the data joined and cleaned, we can now inspect the results by creating a table with our summary information.
 
-```{r}
+
+```r
 library(kableExtra) # Used for tables
 
 c_demo %>%
@@ -228,8 +233,75 @@ c_demo %>%
   kable(booktabs = T) %>%
   kable_styling() %>%
   add_header_above(c(" " = 2, "Percent of Students" = 7, "School Report Card Scores" = 3))
-
 ```
+
+<table class="table" style="margin-left: auto; margin-right: auto;">
+ <thead>
+<tr>
+<th style="border-bottom:hidden" colspan="2"></th>
+<th style="border-bottom:hidden; padding-bottom:0; padding-left:3px;padding-right:3px;text-align: center; " colspan="7"><div style="border-bottom: 1px solid #ddd; padding-bottom: 5px; ">Percent of Students</div></th>
+<th style="border-bottom:hidden; padding-bottom:0; padding-left:3px;padding-right:3px;text-align: center; " colspan="3"><div style="border-bottom: 1px solid #ddd; padding-bottom: 5px; ">School Report Card Scores</div></th>
+</tr>
+  <tr>
+   <th style="text-align:left;"> Cluster </th>
+   <th style="text-align:right;"> N </th>
+   <th style="text-align:left;"> Asian </th>
+   <th style="text-align:left;"> Black </th>
+   <th style="text-align:left;"> Hisp/Lat </th>
+   <th style="text-align:left;"> White </th>
+   <th style="text-align:left;"> ECD </th>
+   <th style="text-align:left;"> SwD </th>
+   <th style="text-align:left;"> LEP </th>
+   <th style="text-align:right;"> Overall </th>
+   <th style="text-align:right;"> Achievement </th>
+   <th style="text-align:right;"> Growth </th>
+  </tr>
+ </thead>
+<tbody>
+  <tr>
+   <td style="text-align:left;"> 1 </td>
+   <td style="text-align:right;"> 28 </td>
+   <td style="text-align:left;"> 11.5% </td>
+   <td style="text-align:left;"> 24.4% </td>
+   <td style="text-align:left;"> 21.2% </td>
+   <td style="text-align:left;"> 36.9% </td>
+   <td style="text-align:left;"> 61.5% </td>
+   <td style="text-align:left;"> 8.7% </td>
+   <td style="text-align:left;"> 8.3% </td>
+   <td style="text-align:right;"> 74.1 </td>
+   <td style="text-align:right;"> 50.4 </td>
+   <td style="text-align:right;"> 74.1 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 2 </td>
+   <td style="text-align:right;"> 150 </td>
+   <td style="text-align:left;"> 2.0% </td>
+   <td style="text-align:left;"> 86.7% </td>
+   <td style="text-align:left;"> 5.2% </td>
+   <td style="text-align:left;"> 2.9% </td>
+   <td style="text-align:left;"> 84.7% </td>
+   <td style="text-align:left;"> 15.1% </td>
+   <td style="text-align:left;"> 1.2% </td>
+   <td style="text-align:right;"> 62.9 </td>
+   <td style="text-align:right;"> 24.6 </td>
+   <td style="text-align:right;"> 65.0 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 3 </td>
+   <td style="text-align:right;"> 116 </td>
+   <td style="text-align:left;"> 5.0% </td>
+   <td style="text-align:left;"> 16.8% </td>
+   <td style="text-align:left;"> 55.3% </td>
+   <td style="text-align:left;"> 19.1% </td>
+   <td style="text-align:left;"> 74.1% </td>
+   <td style="text-align:left;"> 10.9% </td>
+   <td style="text-align:left;"> 17.6% </td>
+   <td style="text-align:right;"> 71.7 </td>
+   <td style="text-align:right;"> 45.0 </td>
+   <td style="text-align:right;"> 71.2 </td>
+  </tr>
+</tbody>
+</table>
 
 # Results
 
