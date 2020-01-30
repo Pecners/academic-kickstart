@@ -31,4 +31,5 @@ In my [last post](<https://spencerschien.info/post/accident-tracking/>), we load
 
 
 As a reminder, our goal here is to determine whether we see a significant decrease in reported traffic accidents since the announcement of the MPD saturation patrols in June of 2019.  
+
 <img src="/post/2019-10-08-milwaukee-traffic-accident-tracking-2_files/figure-html/unnamed-chunk-2-1.png" width="672" /><img src="/post/2019-10-08-milwaukee-traffic-accident-tracking-2_files/figure-html/unnamed-chunk-2-2.png" width="672" /><img src="/post/2019-10-08-milwaukee-traffic-accident-tracking-2_files/figure-html/unnamed-chunk-2-3.png" width="672" /><img src="/post/2019-10-08-milwaukee-traffic-accident-tracking-2_files/figure-html/unnamed-chunk-2-4.png" width="672" />

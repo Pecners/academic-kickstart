@@ -66,6 +66,7 @@ d_point_v
 
 
 As a reminder, our goal here is to determine whether we see a significant decrease in reported traffic accidents since the announcement of the MPD saturation patrols in June of 2019.  
+
 ```{r}
 months <- labeled %>%
   mutate(month = month(CASEDATE)) %>%
