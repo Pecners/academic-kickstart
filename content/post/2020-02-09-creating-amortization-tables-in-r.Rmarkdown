@@ -1,0 +1,39 @@
+---
+title: Creating Amortization Tables in R
+author: Spencer Schien
+date: '2020-02-09'
+slug: creating-amortization-tables-in-r
+categories:
+  - Mortgage Calculator
+tags:
+  - Shiny
+  - Rmarkdown
+  - R
+subtitle: ''
+summary: ''
+authors: []
+lastmod: '2020-02-09T21:35:57-06:00'
+featured: no
+image:
+  caption: ''
+  focal_point: ''
+  preview_only: no
+projects: []
+---
+
+Last year, I bought my first house (huzzah!), and as any respectable R developer, I decided I had to create my own amortization tables in R.  Taking it a step further, I really wanted to know what the effect of extra payments would be.  
+
+Now, I was sure there must be a package already developed to do exactly this, but some quick searching online came up with a lot of web app calculators.  I gave up pretty quickly and turned to the learning opportunity that would be writing my own script to accomplish this task.
+
+The project expanded on me a bit, and in the end, I wrote the script, created a parameterized Rmarkdown document, and wrote a Shiny app.  Over the next three posts, I provide a how-to for each step
+
+## What the Heck is Amortization, Anyway?
+
+Okay, let's start out with a big 'ol COA disclaimer right here -- I'm no financial advisor, banker, CPA, or even that savvy of an investor.  So, I will only provide basic descriptions of financial concepts necessary for us to accomplish the task at hand.
+
+You want to buy a home, but you only have a portion of the total price.  So, you go to a bank to get a loan.  The bank will give you all the money to buy the home now if you promise to pay that amount -- the principal -- plus interest in a certain amount of time.  You will make monthly payments that are part interest and part principal payments until the full amount of principal is repaid.
+
+If you follow the payment schedule, you will pay a certain amount in interest.  This interest rate is variable depending on the amount of outstanding principal, which means if you make extra payments towards principal, there is less interest to be paid.
+
+So, how do you know how much interest you're paying and how much principal each month?  That's where the amortization table comes in -- the table provides the breakdown of interest to principal for each payment.  That means our first task is to translate the calculation into our R script.
+

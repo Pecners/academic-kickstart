@@ -62,7 +62,7 @@ user_groups:
 - Visitors
 ---
 
-Hello!  I'm Spencer, and I love data.  
+I'm a data enthusiast passionate about leveraging the power of data science for the social good.
 
 I've found my way to this work through an unconventional path--though a Political Science/French major in undergrad, my aptitude for analytics led me to be the de facto data analyst from the start of my professional career.  I'm now in a role dedicated to data management and analysis, and it has been in this capacity that I've pushed myself to bring the ever-more-attainable power of data science to my small organization here in Milwaukee.
 
