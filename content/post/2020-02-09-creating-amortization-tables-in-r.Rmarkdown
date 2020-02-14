@@ -21,12 +21,15 @@ image:
 projects: []
 math: true
 ---
+{{% alert note %}}
+This post only applies to fixed-rate loans.
+{{% /alert %}}
 
 Last year, I bought my first house (huzzah!), and as any respectable R developer, I decided I had to create my own amortization tables in R.  Taking it a step further, I really wanted to know what the effect of extra payments would be.  
 
 Now, I was sure there must be a package already developed to do exactly this, but some quick searching online came up with a lot of web app calculators.  I gave up pretty quickly and turned to the learning opportunity that would be writing my own script to accomplish this task.
 
-The project expanded on me a bit, and in the end, I wrote the script, created a parameterized Rmarkdown document, and wrote a Shiny app.  Over the next three posts, I provide a how-to for each step
+The project expanded on me a bit, and in the end, I wrote the script, created a parameterized Rmarkdown document, and wrote a Shiny app.  Over the next three posts, I provide a how-to for each step.
 
 ## What the Heck is Amortization, Anyway?
 
@@ -40,6 +43,8 @@ So, how do you know how much interest you're paying and how much principal each 
 
 ## Doing the Math
 
+### Total Monthly Payments (Principal + Interest)
+
 The following formula calculates the monthly mortgage payment, which includes both the principal and interest:
 
 <div>$$LoanAmount\times\frac{(MonthlyRate\times(1+MonthlyRate)^{\text{term}})}{(1+MonthlyRate)^{\text{term}}-1}$$</div>
@@ -51,7 +56,7 @@ The code below is the equation translated to R.  I've also defined the other var
 
 term <- 360 # 30 years in months
 loan_amount <- 150000 # $150,000 loan
-annual_rate <- .04 # 4% interest rate
+annual_rate <- 0.04 # 4% interest rate
 monthly_rate <- annual_rate/12 # rate converted to monthly rate
 
 # Formula to calculate monthly 
@@ -62,4 +67,58 @@ total_PI <- loan_amount *
    (((1 + monthly_rate) ^ term) - 1)
 ```
 
-In this example, the total monthly payment (i.e. `total_PI`) is `r scales::dollar(total_PI)`.
+In this example, the total monthly payment (i.e. `total_PI`) is $`r paste("\\", scales::dollar(total_PI), sep = "")`$, which when multiplied by the term of the loan results in a total payment amount of $`r paste("\\", scales::dollar(total_PI*term, largest_with_cents = 1e+6), sep = "")`$ -- in other words, over the life of this loan, we'll be paying $`r paste("\\", scales::dollar(total_PI*term - loan_amount, largest_with_cents = 1e+6), sep = "")`$ in interest.
+
+### Breakdown of Principal and Interest in Each Payment
+
+The portion of each payment that goes towards the principal -- or the original loan amount -- is what pays down your loan and builds equity. The portion that goes to interest is the cost you pay for the bank to give you the loan.  Basically, the amount of interest you pay each month is determined by multiplying the `monthly_rate` by the remaining balance of the loan.  This number will be less than the `total_PI`, and whatever the difference is between the two will be the principal portion of the payment.
+
+Since `total_PI` is fixed and the interest portion of the payment is a function of the remaining loan balance, as you pay down the loan, the portion that goes to interest decreases, which results in a comparable increase in the portion that goes to principal.
+
+Now we're getting very close to being able to create our amortization table. We know what our `total_PI` is, so now we just need to write code that will calculate the interest and principal portion of each payment, and then calculate the remaining principal.  
+
+The following code will create numberic vectors for each value, with the length of each being set to the term of the loan.
+
+```{r message=FALSE, warning=FALSE}
+# Initialize the vectors as numeric with a length equal
+# to the term of the loan.
+
+interest <- principal <- balance <- date <- vector("numeric", term)
+
+# For loop to calculate values for each payment
+
+for (i in 1:term) {
+   intr <- loan_amount * monthly_rate
+   prnp <- total_PI - intr
+   loan_amount <- loan_amount - prnp
+   
+   interest[i] <- intr
+   principal[i] <- prnp
+   balance[i] <- loan_amount
+}
+
+# Throw vectors into a table for easier use
+
+library(tidyverse) # for data manipulation going forward
+
+standard_schedule <- tibble(payment_number = 1:term,
+                            interest,
+                            principal,
+                            balance) %>%
+  
+  # Format columns to display as dollars
+  
+  modify_at(c("interest", "principal", "balance"), scales::dollar,
+            largest_with_cents = 1e+6)
+
+# Print head of standard_schedule
+
+library(knitr) # both libraries for printing tables
+library(kableExtra)
+
+
+standard_schedule %>%
+  head(10) %>% # Print first ten payments
+  kable(booktabs = T) %>%
+  kable_styling()
+```
