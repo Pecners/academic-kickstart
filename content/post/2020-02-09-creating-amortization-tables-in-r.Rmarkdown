@@ -38,6 +38,28 @@ If you follow the payment schedule, you will pay a certain amount in interest.  
 
 So, how do you know how much interest you're paying and how much principal each month?  That's where the amortization table comes in -- the table provides the breakdown of interest to principal for each payment.  That means our first task is to translate the table calculation into our R script.
 
-<div>$$\text{LoanAmount}\times\frac{(MonthlyRate\times(1+MonthlyRate)^{\text{term}})}{(1+MonthlyRate)^{\text{term}}-1}$$</div>
+## Doing the Math
 
+The following formula calculates the monthly mortgage payment, which includes both the principal and interest:
 
+<div>$$LoanAmount\times\frac{(MonthlyRate\times(1+MonthlyRate)^{\text{term}})}{(1+MonthlyRate)^{\text{term}}-1}$$</div>
+
+The code below is the equation translated to R.  I've also defined the other variables we'll need with default values.
+
+```{r}
+# Define the variables
+
+term <- 360 # 30 years in months
+loan_amount <- 150000 # $150,000 loan
+annual_rate <- .04 # 4% interest rate
+monthly_rate <- annual_rate/12 # rate converted to monthly rate
+
+# Formula to calculate monthly 
+# principal + interest payment
+
+total_PI <- loan_amount * 
+   (monthly_rate * (1 + monthly_rate) ^ term)/
+   (((1 + monthly_rate) ^ term) - 1)
+```
+
+In this example, the total monthly payment (i.e. `total_PI`) is `r scales::dollar(total_PI)`.
