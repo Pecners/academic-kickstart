@@ -19,6 +19,7 @@ image:
   focal_point: ''
   preview_only: no
 projects: []
+math: true
 ---
 
 Last year, I bought my first house (huzzah!), and as any respectable R developer, I decided I had to create my own amortization tables in R.  Taking it a step further, I really wanted to know what the effect of extra payments would be.  
@@ -36,6 +37,8 @@ You want to buy a home, but you only have a portion of the total price.  So, you
 If you follow the payment schedule, you will pay a certain amount in interest.  This interest rate is variable depending on the amount of outstanding principal, which means if you make extra payments towards principal, there is less interest to be paid.
 
 So, how do you know how much interest you're paying and how much principal each month?  That's where the amortization table comes in -- the table provides the breakdown of interest to principal for each payment.  That means our first task is to translate the table calculation into our R script.
+
+
 
 $$\text{LoanAmount} \times \frac{(MonthlyRate \times (1 + MonthlyRate)^\text{term})}{(1 + MonthlyRate)^\text{term} - 1}$$
 
