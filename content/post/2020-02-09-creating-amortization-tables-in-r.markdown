@@ -39,13 +39,4 @@ So, how do you know how much interest you're paying and how much principal each 
 
 `$$\text{LoanAmount} \times \frac{(MonthlyRate \times (1 + MonthlyRate)^\text{term})}{(1 + MonthlyRate)^\text{term} - 1}$$`
 
-# Calculate standard amortization schedule
-term <- params$term
-loan_amount <- params$loan_amount
-annual_rate <- params$annual_rate
-monthly_rate <- annual_rate/12
-total_PI <- loan_amount * 
-   (monthly_rate * (1 + monthly_rate) ^ term)/
-   (((1 + monthly_rate) ^ term) - 1)
-
 
