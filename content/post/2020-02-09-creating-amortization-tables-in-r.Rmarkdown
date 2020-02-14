@@ -21,6 +21,10 @@ image:
 projects: []
 math: true
 ---
+```{r}
+knitr::opts_chunk$set(message=FALSE, warning=FALSE)
+```
+
 {{% alert note %}}
 This post only applies to fixed-rate loans.
 {{% /alert %}}
@@ -83,7 +87,7 @@ Now we're getting very close to being able to create our amortization table. We 
 
 The following code will create numberic vectors for each value, with the length of each being set to the term of the loan.
 
-```{r message=FALSE, warning=FALSE}
+```{r}
 # Initialize the vectors as numeric with a length equal
 # to the term of the loan.
 

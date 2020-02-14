@@ -21,6 +21,11 @@ image:
 projects: []
 math: true
 ---
+
+```r
+knitr::opts_chunk$set(message=FALSE, warning=FALSE)
+```
+
 {{% alert note %}}
 This post only applies to fixed-rate loans.
 {{% /alert %}}
@@ -229,7 +234,7 @@ standard_schedule %>%
   labs(title = "Payment Portions of Monthly Mortgage")
 ```
 
-<img src="/post/2020-02-09-creating-amortization-tables-in-r_files/figure-html/unnamed-chunk-3-1.png" width="672" />
+<img src="/post/2020-02-09-creating-amortization-tables-in-r_files/figure-html/unnamed-chunk-4-1.png" width="672" />
 
 Judging from this visual, we can estimate that the portion of each payment going to principal will exceed the portion going to interest at about the 150th payment.  To be exact, we can filter the amortization table to find where `principal` exceeds `interest` for the first time.
 
@@ -280,20 +285,7 @@ Now, a natural follow-up question is when will the 153rd payment take place? Thi
 
 ```r
 library(lubridate)
-```
 
-```
-## 
-## Attaching package: 'lubridate'
-```
-
-```
-## The following object is masked from 'package:base':
-## 
-##     date
-```
-
-```r
 # Set first payment date
 
 first_payment <- "2020-01-01"
