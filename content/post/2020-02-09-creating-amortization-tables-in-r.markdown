@@ -70,6 +70,10 @@ total_PI <- loan_amount *
 
 In this example, the total monthly payment (i.e. `total_PI`) is $\$716.12$, which when multiplied by the term of the loan results in a total payment amount of $\$257,804.26$ -- in other words, over the life of this loan, we'll be paying $\$107,804.26$ in interest.
 
+{{% alert note %}}
+Additional monthly payment items such as PMI and escrow are excluded here.
+{{% /alert %}}
+
 ### Breakdown of Principal and Interest in Each Payment
 
 The portion of each payment that goes towards the principal -- or the original loan amount -- is what pays down your loan and builds equity. The portion that goes to interest is the cost you pay for the bank to give you the loan.  Basically, the amount of interest you pay each month is determined by multiplying the `monthly_rate` by the remaining balance of the loan.  This number will be less than the `total_PI`, and whatever the difference is between the two will be the principal portion of the payment.
@@ -106,21 +110,23 @@ library(tidyverse) # for data manipulation going forward
 standard_schedule <- tibble(payment_number = 1:term,
                             interest,
                             principal,
-                            balance) %>%
-  
-  # Format columns to display as dollars
-  
-  modify_at(c("interest", "principal", "balance"), scales::dollar,
-            largest_with_cents = 1e+6)
+                            balance)
 
 # Print head of standard_schedule
 
 library(knitr) # both libraries for printing tables
 library(kableExtra)
 
-
 standard_schedule %>%
-  head(10) %>% # Print first ten payments
+  
+  # Format columns to display as dollars
+  
+  modify_at(c("interest", "principal", "balance"), scales::dollar,
+            largest_with_cents = 1e+6) %>%
+  
+  # Limit to first 10 payments
+  
+  head(10) %>% 
   kable(booktabs = T) %>%
   kable_styling()
 ```
@@ -197,3 +203,201 @@ standard_schedule %>%
   </tr>
 </tbody>
 </table>
+
+With our payments now calculated for the full term of the loan, we can visualize the interest and principal portions in a line graph.  
+
+
+```r
+# Pivot longer makes it easier to visualize,
+# but isn't totally necessary
+
+standard_schedule %>%
+  pivot_longer(cols = c("interest", "principal"), 
+               names_to = "Payment Portion", 
+               values_to = "amount") %>%
+  ggplot(aes(payment_number, amount, color = `Payment Portion`)) +
+  geom_line() +
+  
+  # '#85bb65' is the color of $$$
+  
+  scale_color_manual(values = c("red", "#85bb65")) +
+  
+  # Change the theme for better appearance
+  
+  theme_minimal() +
+  scale_y_continuous(labels = scales::dollar) +
+  labs(title = "Payment Portions of Monthly Mortgage")
+```
+
+<img src="/post/2020-02-09-creating-amortization-tables-in-r_files/figure-html/unnamed-chunk-3-1.png" width="672" />
+
+Judging from this visual, we can estimate that the portion of each payment going to principal will exceed the portion going to interest at about the 150th payment.  To be exact, we can filter the amortization table to find where `principal` exceeds `interest` for the first time.
+
+
+```r
+# Filter for interest less than principal
+
+standard_schedule %>%
+  filter(interest < principal) %>%
+  
+  # Include only the first observation
+  
+  head(1) %>%
+  
+  #  Prettify for table
+  
+  modify_at(c("interest", "principal", "balance"), scales::dollar,
+            largest_with_cents = 1e+6) %>%
+  kable(booktabs = T) %>%
+  kable_styling()
+```
+
+<table class="table" style="margin-left: auto; margin-right: auto;">
+ <thead>
+  <tr>
+   <th style="text-align:right;"> payment_number </th>
+   <th style="text-align:left;"> interest </th>
+   <th style="text-align:left;"> principal </th>
+   <th style="text-align:left;"> balance </th>
+  </tr>
+ </thead>
+<tbody>
+  <tr>
+   <td style="text-align:right;"> 153 </td>
+   <td style="text-align:left;"> $357.72 </td>
+   <td style="text-align:left;"> $358.41 </td>
+   <td style="text-align:left;"> $106,956.13 </td>
+  </tr>
+</tbody>
+</table>
+
+So payment number 153 is the first payment where the portion going to principal is greater than the portion going to interest.
+
+### Adding Dates
+
+Now, a natural follow-up question is when will the 153rd payment take place? This is actually an easy question to answer -- all we need to do is add a date vector to our table. We will create a variable with the date of the first monthly payment, and then the vector will be a sequence of dates by month for the term of the loan.  The following code accomplishes this task.
+
+
+```r
+library(lubridate)
+```
+
+```
+## 
+## Attaching package: 'lubridate'
+```
+
+```
+## The following object is masked from 'package:base':
+## 
+##     date
+```
+
+```r
+# Set first payment date
+
+first_payment <- "2020-01-01"
+
+
+# Add vector as variable to standard schedule
+
+standard_schedule <- standard_schedule %>%
+  mutate(date = seq(from = ymd(first_payment), by = "month",
+            length.out = term)) %>%
+  select(date, everything())
+
+standard_schedule %>%
+  modify_at(c("interest", "principal", "balance"), scales::dollar,
+          largest_with_cents = 1e+6) %>%
+  head(10) %>%
+  kable(booktabs = T) %>%
+  kable_styling()
+```
+
+<table class="table" style="margin-left: auto; margin-right: auto;">
+ <thead>
+  <tr>
+   <th style="text-align:left;"> date </th>
+   <th style="text-align:right;"> payment_number </th>
+   <th style="text-align:left;"> interest </th>
+   <th style="text-align:left;"> principal </th>
+   <th style="text-align:left;"> balance </th>
+  </tr>
+ </thead>
+<tbody>
+  <tr>
+   <td style="text-align:left;"> 2020-01-01 </td>
+   <td style="text-align:right;"> 1 </td>
+   <td style="text-align:left;"> $500.00 </td>
+   <td style="text-align:left;"> $216.12 </td>
+   <td style="text-align:left;"> $149,783.88 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 2020-02-01 </td>
+   <td style="text-align:right;"> 2 </td>
+   <td style="text-align:left;"> $499.28 </td>
+   <td style="text-align:left;"> $216.84 </td>
+   <td style="text-align:left;"> $149,567.03 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 2020-03-01 </td>
+   <td style="text-align:right;"> 3 </td>
+   <td style="text-align:left;"> $498.56 </td>
+   <td style="text-align:left;"> $217.57 </td>
+   <td style="text-align:left;"> $149,349.47 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 2020-04-01 </td>
+   <td style="text-align:right;"> 4 </td>
+   <td style="text-align:left;"> $497.83 </td>
+   <td style="text-align:left;"> $218.29 </td>
+   <td style="text-align:left;"> $149,131.18 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 2020-05-01 </td>
+   <td style="text-align:right;"> 5 </td>
+   <td style="text-align:left;"> $497.10 </td>
+   <td style="text-align:left;"> $219.02 </td>
+   <td style="text-align:left;"> $148,912.16 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 2020-06-01 </td>
+   <td style="text-align:right;"> 6 </td>
+   <td style="text-align:left;"> $496.37 </td>
+   <td style="text-align:left;"> $219.75 </td>
+   <td style="text-align:left;"> $148,692.41 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 2020-07-01 </td>
+   <td style="text-align:right;"> 7 </td>
+   <td style="text-align:left;"> $495.64 </td>
+   <td style="text-align:left;"> $220.48 </td>
+   <td style="text-align:left;"> $148,471.93 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 2020-08-01 </td>
+   <td style="text-align:right;"> 8 </td>
+   <td style="text-align:left;"> $494.91 </td>
+   <td style="text-align:left;"> $221.22 </td>
+   <td style="text-align:left;"> $148,250.71 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 2020-09-01 </td>
+   <td style="text-align:right;"> 9 </td>
+   <td style="text-align:left;"> $494.17 </td>
+   <td style="text-align:left;"> $221.95 </td>
+   <td style="text-align:left;"> $148,028.76 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 2020-10-01 </td>
+   <td style="text-align:right;"> 10 </td>
+   <td style="text-align:left;"> $493.43 </td>
+   <td style="text-align:left;"> $222.69 </td>
+   <td style="text-align:left;"> $147,806.06 </td>
+  </tr>
+</tbody>
+</table>
+
+Now when we look at the 153rd payment, we see the date is September 01, 2032.
+
+## Creating an Adjusted Schedule
