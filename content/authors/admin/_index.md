@@ -1,6 +1,6 @@
 ---
 # Display name
-name: J Spencer Schien
+name: Spencer Schien
 
 # Username (this should match the folder name)
 authors:

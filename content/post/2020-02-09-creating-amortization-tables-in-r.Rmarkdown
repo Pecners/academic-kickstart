@@ -210,3 +210,27 @@ standard_schedule %>%
 Now when we look at the 153rd payment, we see the date is `r standard_schedule[153, 1] %>% modify(format, "%B %d, %Y")`.
 
 ## Creating an Adjusted Schedule
+
+Next, we will create an adjusted schedule that accounts for both extra monthly and one-time payments towards principal.  With these extra payments, the principal will be paid off before the full term of the loan, and you will therefore pay less interest.
+
+To accomplish this, we will create new variables in our schedule for both extra monthly payments and extra one-time payments.  Additionally, we will want to save our adjusted schedule as a different object than `standard_schedule` so we can compare it to the standard schedule.
+
+```{r}
+loan_amount1 <- loan_amount
+
+interest1 <- principal1 <- extra <- balance1 <- bonus <- vector("numeric", term)
+
+extra <- 100
+
+for (i in 1:term) {
+   intr1 <- loan_amount1 * monthly_rate
+   prnp1 <- total_PI - intr1
+   loan_amount1 <- loan_amount1 - prnp1 - extra - bonus[i]
+   
+   extra[i] <- extra
+   interest1[i] <- intr1
+   principal1[i] <- prnp1
+   balance1[i] <- loan_amount1
+}
+```
+
