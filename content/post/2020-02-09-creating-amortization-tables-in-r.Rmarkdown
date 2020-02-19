@@ -59,14 +59,14 @@ The code below is the equation translated to R.  I've also defined the other var
 # Define the variables
 
 term <- 360 # 30 years in months
-loan_amount <- 150000 # $150,000 loan
+original_loan_amount <- 150000 # $150,000 loan
 annual_rate <- 0.04 # 4% interest rate
 monthly_rate <- annual_rate/12 # rate converted to monthly rate
 
 # Formula to calculate monthly 
 # principal + interest payment
 
-total_PI <- loan_amount * 
+total_PI <- original_loan_amount * 
    (monthly_rate * (1 + monthly_rate) ^ term)/
    (((1 + monthly_rate) ^ term) - 1)
 ```
@@ -93,6 +93,7 @@ The following code will create numberic vectors for each value, with the length 
 
 interest <- principal <- balance <- date <- vector("numeric", term)
 
+loan_amount <- original_loan_amount
 # For loop to calculate values for each payment
 
 for (i in 1:term) {
@@ -216,7 +217,7 @@ Next, we will create an adjusted schedule that accounts for both extra monthly a
 To accomplish this, we will create new variables in our schedule for both extra monthly payments and extra one-time payments.  Additionally, we will want to save our adjusted schedule as a different object than `standard_schedule` so we can compare it to the standard schedule.
 
 ```{r}
-loan_amount1 <- loan_amount
+loan_amount1 <- original_loan_amount
 
 interest1 <- principal1 <- extra <- balance1 <- bonus <- vector("numeric", term)
 
@@ -232,5 +233,14 @@ for (i in 1:term) {
    principal1[i] <- prnp1
    balance1[i] <- loan_amount1
 }
+
+updated_schedule <- tibble(date = seq(from = ymd(first_payment), by = "month",
+            length.out = term),
+            payment_number = 1:term,
+                            interest1,
+                            principal1,
+                           extra,
+                            balance1)
+
 ```
 
