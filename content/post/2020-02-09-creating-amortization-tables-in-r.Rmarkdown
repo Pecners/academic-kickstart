@@ -341,7 +341,8 @@ both_schedules %>%
   labs(title = paste("Amount in Interest Saved: ", scales::dollar(sum(interest) - sum(interest1)), sep = ""),
        subtitle = paste("By Paying", scales::dollar(extra), "Extra Per Month", sep = " "),
        y = "Total Interest Paid",
-       x = "Payment Date", linetype = "") +
+       x = "Payment Date", linetype = "",
+       caption = paste("Original Loan Amount: ", scales::dollar(original_loan_amount), sep = "")) +
   guides(linetype = guide_legend(override.aes = list(col = "red")))
 ```
 
