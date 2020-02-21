@@ -29,7 +29,7 @@ knitr::opts_chunk$set(message=FALSE, warning=FALSE)
 This post only applies to fixed-rate loans.
 {{% /alert %}}
 
-Last year, I bought my first house (huzzah!), and as any respectable R developer, I decided I had to create my own amortization tables in R.  Taking it a step further, I really wanted to know what the effect of extra payments would be.  
+Last year, I bought my first house (huzzah!), and as any respectable useR, I decided I had to create my own amortization tables in R.  Taking it a step further, I really wanted to know what the effect of extra payments would be.  
 
 Now, I was sure there must be a package already developed to do exactly this, but some quick searching online came up with a lot of web app calculators.  I gave up pretty quickly and turned to the learning opportunity that would be writing my own script to accomplish this task.
 
