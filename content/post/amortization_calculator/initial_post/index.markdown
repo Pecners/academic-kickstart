@@ -14,10 +14,10 @@ summary: 'Learn how to build an amortization calculator in R.'
 authors: []
 lastmod: '2020-02-09T21:35:57-06:00'
 featured: no
-image:
+image: 
   caption: ''
   focal_point: ''
-  preview_only: no
+  preview_only: yes
 projects: []
 math: true
 ---
@@ -235,7 +235,7 @@ standard_schedule %>%
   labs(title = "Payment Portions of Monthly Mortgage")
 ```
 
-<img src="/post/2020-02-09-creating-amortization-tables-in-r_files/figure-html/unnamed-chunk-4-1.png" width="672" />
+<img src="/post/amortization_calculator/initial_post/index_files/figure-html/unnamed-chunk-4-1.png" width="672" />
 
 Judging from this visual, we can estimate that the portion of each payment going to principal will exceed the portion going to interest at about the 150th payment.  To be exact, we can filter the amortization table to find where `principal` exceeds `interest` for the first time.
 
@@ -715,11 +715,12 @@ both_schedules %>%
   labs(title = paste("Amount in Interest Saved: ", scales::dollar(sum(interest) - sum(interest1)), sep = ""),
        subtitle = paste("By Paying", scales::dollar(extra), "Extra Per Month", sep = " "),
        y = "Total Interest Paid",
-       x = "Payment Date", linetype = "") +
+       x = "Payment Date", linetype = "",
+       caption = paste("Based on ", scales::dollar(original_loan_amount), " loan over " , (term/12), " years.", sep = "")) +
   guides(linetype = guide_legend(override.aes = list(col = "red")))
 ```
 
-<img src="/post/2020-02-09-creating-amortization-tables-in-r_files/figure-html/unnamed-chunk-10-1.png" width="672" />
+<img src="/post/amortization_calculator/initial_post/index_files/figure-html/unnamed-chunk-10-1.png" width="672" />
 
 
 Stay tuned for my next post that will wrap the work done here into a Shiny App.

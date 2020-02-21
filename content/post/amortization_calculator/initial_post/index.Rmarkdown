@@ -14,10 +14,10 @@ summary: 'Learn how to build an amortization calculator in R.'
 authors: []
 lastmod: '2020-02-09T21:35:57-06:00'
 featured: no
-image:
+image: 
   caption: ''
   focal_point: ''
-  preview_only: no
+  preview_only: yes
 projects: []
 math: true
 ---
@@ -342,7 +342,7 @@ both_schedules %>%
        subtitle = paste("By Paying", scales::dollar(extra), "Extra Per Month", sep = " "),
        y = "Total Interest Paid",
        x = "Payment Date", linetype = "",
-       caption = paste("Original Loan Amount: ", scales::dollar(original_loan_amount), sep = "")) +
+       caption = paste("Based on ", scales::dollar(original_loan_amount), " loan over " , (term/12), " years.", sep = "")) +
   guides(linetype = guide_legend(override.aes = list(col = "red")))
 ```
 
