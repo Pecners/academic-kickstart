@@ -1,7 +1,7 @@
 ---
-title: Creating Amortization Tables in R
+title: Creating an Amortization Calculator in R
 author: Spencer Schien
-date: '2020-02-09'
+date: ''
 slug: creating-amortization-tables-in-r
 categories:
   - Mortgage Calculator
@@ -10,7 +10,7 @@ tags:
   - Rmarkdown
   - R
 subtitle: ''
-summary: ''
+summary: 'Learn how to build an amortization calculator in R.'
 authors: []
 lastmod: '2020-02-09T21:35:57-06:00'
 featured: no
@@ -677,4 +677,49 @@ For the last payment, the interest is calculated as normal, but the principal po
 
 We now see that by making an extra monthly payment of $100, we will make 74 fewer payments and we will make our final payment on October 01, 2043 instead of December 01, 2049.
 
-And finally, we will pay $25,205.42 less in interest over the life of the loan.
+And finally, we will pay $25,205.42 less in interest over the life of the loan, while the amount of principal we pay will remain the same, of course.  
+
+The visual below depicts the resulting savings.
+
+
+```r
+# Viz is easier if schedules are joined
+# First, create matching variables 
+
+ss <- standard_schedule %>%
+  mutate(schedule = "standard",
+         extra = 0)
+
+us <- updated_schedule %>%
+  mutate(schedule = "updated")
+
+both_schedules <- bind_rows(ss, us)
+
+both_schedules %>%
+  group_by(schedule) %>%
+  mutate(cum_int = cumsum(interest),
+            cum_prnp = cumsum(principal)) %>%
+  pivot_longer(cols = c("cum_int", "cum_prnp"), 
+               names_to = "Payment Portion", 
+               values_to = "amount") %>%
+  filter(`Payment Portion` != "cum_prnp") %>%
+  ggplot(aes(date, amount, 
+             group = schedule)) +
+  geom_line(aes(linetype = schedule), color = "red") +
+  
+  # Change the theme for better appearance
+  
+  theme_minimal() +
+  scale_y_continuous(labels = scales::dollar) +
+  scale_linetype_discrete(labels = c("Standard Schedule", "Updated Schedule")) +
+  labs(title = paste("Amount in Interest Saved: ", scales::dollar(sum(interest) - sum(interest1)), sep = ""),
+       subtitle = paste("By Paying", scales::dollar(extra), "Extra Per Month", sep = " "),
+       y = "Total Interest Paid",
+       x = "Payment Date", linetype = "") +
+  guides(linetype = guide_legend(override.aes = list(col = "red")))
+```
+
+<img src="/post/2020-02-09-creating-amortization-tables-in-r_files/figure-html/unnamed-chunk-10-1.png" width="672" />
+
+
+Stay tuned for my next post that will wrap the work done here into a Shiny App.
