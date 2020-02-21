@@ -71,7 +71,7 @@ total_PI <- original_loan_amount *
    (((1 + monthly_rate) ^ term) - 1)
 ```
 
-In this example, the total monthly payment (i.e. `total_PI`) is $`r paste("\\", scales::dollar(total_PI), sep = "")`$, which when multiplied by the term of the loan results in a total payment amount of $`r paste("\\", scales::dollar(total_PI*term, largest_with_cents = 1e+6), sep = "")`$ -- in other words, over the life of this loan, we'll be paying $`r paste("\\", scales::dollar(total_PI*term - loan_amount, largest_with_cents = 1e+6), sep = "")`$ in interest.
+In this example, the total monthly payment (i.e. `total_PI`) is $`r paste("\\", scales::dollar(total_PI), sep = "")`$, which when multiplied by the term of the loan results in a total payment amount of $`r paste("\\", scales::dollar(total_PI*term, largest_with_cents = 1e+6), sep = "")`$ -- in other words, over the life of this loan, we'll be paying $`r paste("\\", scales::dollar(total_PI*term - original_loan_amount, largest_with_cents = 1e+6), sep = "")`$ in interest.
 
 {{% alert note %}}
 Additional monthly payment items such as PMI and escrow are excluded here.
@@ -216,31 +216,92 @@ Next, we will create an adjusted schedule that accounts for both extra monthly a
 
 To accomplish this, we will create new variables in our schedule for both extra monthly payments and extra one-time payments.  Additionally, we will want to save our adjusted schedule as a different object than `standard_schedule` so we can compare it to the standard schedule.
 
-```{r}
+```{r message=FALSE, warning=FALSE}
+# Create new variables for updated schedule
+
 loan_amount1 <- original_loan_amount
 
-interest1 <- principal1 <- extra <- balance1 <- bonus <- vector("numeric", term)
+interest1 <- principal1 <- extra <- xtra <- balance1 <- bonus <- NULL
 
-extra <- 100
+# Set the extra monthly payment amount
 
 for (i in 1:term) {
-   intr1 <- loan_amount1 * monthly_rate
-   prnp1 <- total_PI - intr1
-   loan_amount1 <- loan_amount1 - prnp1 - extra - bonus[i]
-   
-   extra[i] <- extra
-   interest1[i] <- intr1
-   principal1[i] <- prnp1
-   balance1[i] <- loan_amount1
+  
+  # Stop the for loop when blance is paid off
+  # Otherwise, loop will keep making monthly payments
+  # Also must be sure to round values to 0.00
+  
+  if(loan_amount1 > 0.00) {
+    intr1 <- (loan_amount1 * monthly_rate) %>%
+      
+      # Round to 0.00 for payments
+      
+      round(2)
+    
+    # Last payment won't be in full
+    
+    prnp1 <- ifelse(loan_amount1 < (total_PI - intr1),
+                    loan_amount1,
+                    total_PI - intr1) %>% round(2)
+    
+    # Last payment won't need extra payment
+    
+    xtra <- ifelse(loan_amount1 < (total_PI - intr1), 0, 100)
+    
+    loan_amount1 <- (loan_amount1 - prnp1 - xtra) %>%
+      round(2)
+  
+    extra[i] <- xtra
+    interest1[i] <- intr1
+    principal1[i] <- prnp1
+    balance1[i] <- loan_amount1
+  }
 }
 
+# Set new term length 
+
+new_term <- length(balance1)
+
+# Combine in single table
+
 updated_schedule <- tibble(date = seq(from = ymd(first_payment), by = "month",
-            length.out = term),
-            payment_number = 1:term,
-                            interest1,
-                            principal1,
-                           extra,
-                            balance1)
+                                      length.out = new_term),
+                          payment_number = 1:new_term,
+                          interest = interest1,
+                          principal = principal1,
+                          extra,
+                          balance = balance1)
+
 
 ```
 
+The code above creates the `updated_schedule` table for us.  We can inspect the first ten payments just like we did with the `standard_schedule`, with the addition of our extra monthly payment.
+
+```{r}
+
+updated_schedule %>%
+  modify_at(c("interest", "principal", "extra", "balance"), scales::dollar,
+          largest_with_cents = 1e+6) %>%
+  head(10) %>%
+  kable(booktabs = T) %>%
+  kable_styling()
+```
+
+We can look at the last ten rows as well to see how our code above works for the last payment.
+
+```{r}
+updated_schedule %>%
+  modify_at(c("interest", "principal", "extra", "balance"), scales::dollar,
+          largest_with_cents = 1e+6) %>%
+  tail(10) %>%
+  kable(booktabs = T) %>%
+  kable_styling()
+```
+
+### The Effect of Extra Payments
+
+For the last payment, the interest is calculated as normal, but the principal portion is only the remainder of the balance less the interest instead of the remainder of the `total_PI` we calculated in the beginning. The extra payment is lowered to zero as well, since it isn't necessary.
+
+We now see that by making an extra monthly payment of $100, we will make `r nrow(standard_schedule) - nrow(updated_schedule)` fewer payments and we will make our final payment on `r updated_schedule[nrow(updated_schedule), 1] %>% modify(format, "%B %d, %Y")` instead of `r standard_schedule[nrow(standard_schedule), 1] %>% modify(format, "%B %d, %Y")`.
+
+And finally, we will pay `r scales::dollar(sum(interest) - sum(interest1))` less in interest over the life of the loan.

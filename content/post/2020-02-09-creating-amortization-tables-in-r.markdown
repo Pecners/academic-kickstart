@@ -61,14 +61,14 @@ The code below is the equation translated to R.  I've also defined the other var
 # Define the variables
 
 term <- 360 # 30 years in months
-loan_amount <- 150000 # $150,000 loan
+original_loan_amount <- 150000 # $150,000 loan
 annual_rate <- 0.04 # 4% interest rate
 monthly_rate <- annual_rate/12 # rate converted to monthly rate
 
 # Formula to calculate monthly 
 # principal + interest payment
 
-total_PI <- loan_amount * 
+total_PI <- original_loan_amount * 
    (monthly_rate * (1 + monthly_rate) ^ term)/
    (((1 + monthly_rate) ^ term) - 1)
 ```
@@ -96,6 +96,7 @@ The following code will create numberic vectors for each value, with the length 
 
 interest <- principal <- balance <- date <- vector("numeric", term)
 
+loan_amount <- original_loan_amount
 # For loop to calculate values for each payment
 
 for (i in 1:term) {
@@ -400,21 +401,280 @@ To accomplish this, we will create new variables in our schedule for both extra 
 
 
 ```r
-loan_amount1 <- loan_amount
+# Create new variables for updated schedule
 
-interest1 <- principal1 <- extra <- balance1 <- bonus <- vector("numeric", term)
+loan_amount1 <- original_loan_amount
 
-extra <- 100
+interest1 <- principal1 <- extra <- xtra <- balance1 <- bonus <- NULL
+
+# Set the extra monthly payment amount
 
 for (i in 1:term) {
-   intr1 <- loan_amount1 * monthly_rate
-   prnp1 <- total_PI - intr1
-   loan_amount1 <- loan_amount1 - prnp1 - extra - bonus[i]
-   
-   extra[i] <- extra
-   interest1[i] <- intr1
-   principal1[i] <- prnp1
-   balance1[i] <- loan_amount1
+  
+  # Stop the for loop when blance is paid off
+  # Otherwise, loop will keep making monthly payments
+  # Also must be sure to round values to 0.00
+  
+  if(loan_amount1 > 0.00) {
+    intr1 <- (loan_amount1 * monthly_rate) %>%
+      
+      # Round to 0.00 for payments
+      
+      round(2)
+    
+    # Last payment won't be in full
+    
+    prnp1 <- ifelse(loan_amount1 < (total_PI - intr1),
+                    loan_amount1,
+                    total_PI - intr1) %>% round(2)
+    
+    # Last payment won't need extra payment
+    
+    xtra <- ifelse(loan_amount1 < (total_PI - intr1), 0, 100)
+    
+    loan_amount1 <- (loan_amount1 - prnp1 - xtra) %>%
+      round(2)
+  
+    extra[i] <- xtra
+    interest1[i] <- intr1
+    principal1[i] <- prnp1
+    balance1[i] <- loan_amount1
+  }
 }
+
+# Set new term length 
+
+new_term <- length(balance1)
+
+# Combine in single table
+
+updated_schedule <- tibble(date = seq(from = ymd(first_payment), by = "month",
+                                      length.out = new_term),
+                          payment_number = 1:new_term,
+                          interest = interest1,
+                          principal = principal1,
+                          extra,
+                          balance = balance1)
 ```
 
+The code above creates the `updated_schedule` table for us.  We can inspect the first ten payments just like we did with the `standard_schedule`, with the addition of our extra monthly payment.
+
+
+```r
+updated_schedule %>%
+  modify_at(c("interest", "principal", "extra", "balance"), scales::dollar,
+          largest_with_cents = 1e+6) %>%
+  head(10) %>%
+  kable(booktabs = T) %>%
+  kable_styling()
+```
+
+<table class="table" style="margin-left: auto; margin-right: auto;">
+ <thead>
+  <tr>
+   <th style="text-align:left;"> date </th>
+   <th style="text-align:right;"> payment_number </th>
+   <th style="text-align:left;"> interest </th>
+   <th style="text-align:left;"> principal </th>
+   <th style="text-align:left;"> extra </th>
+   <th style="text-align:left;"> balance </th>
+  </tr>
+ </thead>
+<tbody>
+  <tr>
+   <td style="text-align:left;"> 2020-01-01 </td>
+   <td style="text-align:right;"> 1 </td>
+   <td style="text-align:left;"> $500.00 </td>
+   <td style="text-align:left;"> $216.12 </td>
+   <td style="text-align:left;"> $100 </td>
+   <td style="text-align:left;"> $149,683.88 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 2020-02-01 </td>
+   <td style="text-align:right;"> 2 </td>
+   <td style="text-align:left;"> $498.95 </td>
+   <td style="text-align:left;"> $217.17 </td>
+   <td style="text-align:left;"> $100 </td>
+   <td style="text-align:left;"> $149,366.71 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 2020-03-01 </td>
+   <td style="text-align:right;"> 3 </td>
+   <td style="text-align:left;"> $497.89 </td>
+   <td style="text-align:left;"> $218.23 </td>
+   <td style="text-align:left;"> $100 </td>
+   <td style="text-align:left;"> $149,048.48 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 2020-04-01 </td>
+   <td style="text-align:right;"> 4 </td>
+   <td style="text-align:left;"> $496.83 </td>
+   <td style="text-align:left;"> $219.29 </td>
+   <td style="text-align:left;"> $100 </td>
+   <td style="text-align:left;"> $148,729.19 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 2020-05-01 </td>
+   <td style="text-align:right;"> 5 </td>
+   <td style="text-align:left;"> $495.76 </td>
+   <td style="text-align:left;"> $220.36 </td>
+   <td style="text-align:left;"> $100 </td>
+   <td style="text-align:left;"> $148,408.83 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 2020-06-01 </td>
+   <td style="text-align:right;"> 6 </td>
+   <td style="text-align:left;"> $494.70 </td>
+   <td style="text-align:left;"> $221.42 </td>
+   <td style="text-align:left;"> $100 </td>
+   <td style="text-align:left;"> $148,087.41 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 2020-07-01 </td>
+   <td style="text-align:right;"> 7 </td>
+   <td style="text-align:left;"> $493.62 </td>
+   <td style="text-align:left;"> $222.50 </td>
+   <td style="text-align:left;"> $100 </td>
+   <td style="text-align:left;"> $147,764.91 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 2020-08-01 </td>
+   <td style="text-align:right;"> 8 </td>
+   <td style="text-align:left;"> $492.55 </td>
+   <td style="text-align:left;"> $223.57 </td>
+   <td style="text-align:left;"> $100 </td>
+   <td style="text-align:left;"> $147,441.34 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 2020-09-01 </td>
+   <td style="text-align:right;"> 9 </td>
+   <td style="text-align:left;"> $491.47 </td>
+   <td style="text-align:left;"> $224.65 </td>
+   <td style="text-align:left;"> $100 </td>
+   <td style="text-align:left;"> $147,116.69 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 2020-10-01 </td>
+   <td style="text-align:right;"> 10 </td>
+   <td style="text-align:left;"> $490.39 </td>
+   <td style="text-align:left;"> $225.73 </td>
+   <td style="text-align:left;"> $100 </td>
+   <td style="text-align:left;"> $146,790.96 </td>
+  </tr>
+</tbody>
+</table>
+
+We can look at the last ten rows as well to see how our code above works for the last payment.
+
+
+```r
+updated_schedule %>%
+  modify_at(c("interest", "principal", "extra", "balance"), scales::dollar,
+          largest_with_cents = 1e+6) %>%
+  tail(10) %>%
+  kable(booktabs = T) %>%
+  kable_styling()
+```
+
+<table class="table" style="margin-left: auto; margin-right: auto;">
+ <thead>
+  <tr>
+   <th style="text-align:left;"> date </th>
+   <th style="text-align:right;"> payment_number </th>
+   <th style="text-align:left;"> interest </th>
+   <th style="text-align:left;"> principal </th>
+   <th style="text-align:left;"> extra </th>
+   <th style="text-align:left;"> balance </th>
+  </tr>
+ </thead>
+<tbody>
+  <tr>
+   <td style="text-align:left;"> 2043-01-01 </td>
+   <td style="text-align:right;"> 277 </td>
+   <td style="text-align:left;"> $24.10 </td>
+   <td style="text-align:left;"> $692.02 </td>
+   <td style="text-align:left;"> $100 </td>
+   <td style="text-align:left;"> $6,436.59 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 2043-02-01 </td>
+   <td style="text-align:right;"> 278 </td>
+   <td style="text-align:left;"> $21.46 </td>
+   <td style="text-align:left;"> $694.66 </td>
+   <td style="text-align:left;"> $100 </td>
+   <td style="text-align:left;"> $5,641.93 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 2043-03-01 </td>
+   <td style="text-align:right;"> 279 </td>
+   <td style="text-align:left;"> $18.81 </td>
+   <td style="text-align:left;"> $697.31 </td>
+   <td style="text-align:left;"> $100 </td>
+   <td style="text-align:left;"> $4,844.62 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 2043-04-01 </td>
+   <td style="text-align:right;"> 280 </td>
+   <td style="text-align:left;"> $16.15 </td>
+   <td style="text-align:left;"> $699.97 </td>
+   <td style="text-align:left;"> $100 </td>
+   <td style="text-align:left;"> $4,044.65 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 2043-05-01 </td>
+   <td style="text-align:right;"> 281 </td>
+   <td style="text-align:left;"> $13.48 </td>
+   <td style="text-align:left;"> $702.64 </td>
+   <td style="text-align:left;"> $100 </td>
+   <td style="text-align:left;"> $3,242.01 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 2043-06-01 </td>
+   <td style="text-align:right;"> 282 </td>
+   <td style="text-align:left;"> $10.81 </td>
+   <td style="text-align:left;"> $705.31 </td>
+   <td style="text-align:left;"> $100 </td>
+   <td style="text-align:left;"> $2,436.70 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 2043-07-01 </td>
+   <td style="text-align:right;"> 283 </td>
+   <td style="text-align:left;"> $8.12 </td>
+   <td style="text-align:left;"> $708.00 </td>
+   <td style="text-align:left;"> $100 </td>
+   <td style="text-align:left;"> $1,628.70 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 2043-08-01 </td>
+   <td style="text-align:right;"> 284 </td>
+   <td style="text-align:left;"> $5.43 </td>
+   <td style="text-align:left;"> $710.69 </td>
+   <td style="text-align:left;"> $100 </td>
+   <td style="text-align:left;"> $818.01 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 2043-09-01 </td>
+   <td style="text-align:right;"> 285 </td>
+   <td style="text-align:left;"> $2.73 </td>
+   <td style="text-align:left;"> $713.39 </td>
+   <td style="text-align:left;"> $100 </td>
+   <td style="text-align:left;"> $4.62 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 2043-10-01 </td>
+   <td style="text-align:right;"> 286 </td>
+   <td style="text-align:left;"> $0.02 </td>
+   <td style="text-align:left;"> $4.62 </td>
+   <td style="text-align:left;"> $0 </td>
+   <td style="text-align:left;"> $0.00 </td>
+  </tr>
+</tbody>
+</table>
+
+### The Effect of Extra Payments
+
+For the last payment, the interest is calculated as normal, but the principal portion is only the remainder of the balance less the interest instead of the remainder of the `total_PI` we calculated in the beginning. The extra payment is lowered to zero as well, since it isn't necessary.
+
+We now see that by making an extra monthly payment of $100, we will make 74 fewer payments and we will make our final payment on October 01, 2043 instead of December 01, 2049.
+
+And finally, we will pay $25,205.42 less in interest over the life of the loan.
