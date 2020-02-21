@@ -1,5 +1,5 @@
 ---
-title: Creating an Amortization Calculator in R
+title: Amortization CalculatoR
 author: Spencer Schien
 date: ''
 slug: creating-amortization-tables-in-r
@@ -9,7 +9,7 @@ tags:
   - Shiny
   - Rmarkdown
   - R
-subtitle: ''
+subtitle: 'How to Build Amortization Tables in R'
 summary: 'Learn how to build an amortization calculator in R.'
 authors: []
 lastmod: '2020-02-09T21:35:57-06:00'
@@ -22,9 +22,6 @@ projects: []
 math: true
 ---
 
-```r
-knitr::opts_chunk$set(message=FALSE, warning=FALSE)
-```
 
 {{% alert note %}}
 This post only applies to fixed-rate loans.
@@ -393,6 +390,38 @@ standard_schedule %>%
 
 Now when we look at the 153rd payment, we see the date is September 01, 2032.
 
+
+```r
+standard_schedule %>%
+  filter(interest < principal) %>%
+  head(1) %>%
+  modify_at(c("interest", "principal", "balance"), scales::dollar,
+            largest_with_cents = 1e+6) %>%
+  kable(booktabs = T) %>%
+  kable_styling()
+```
+
+<table class="table" style="margin-left: auto; margin-right: auto;">
+ <thead>
+  <tr>
+   <th style="text-align:left;"> date </th>
+   <th style="text-align:right;"> payment_number </th>
+   <th style="text-align:left;"> interest </th>
+   <th style="text-align:left;"> principal </th>
+   <th style="text-align:left;"> balance </th>
+  </tr>
+ </thead>
+<tbody>
+  <tr>
+   <td style="text-align:left;"> 2032-09-01 </td>
+   <td style="text-align:right;"> 153 </td>
+   <td style="text-align:left;"> $357.72 </td>
+   <td style="text-align:left;"> $358.41 </td>
+   <td style="text-align:left;"> $106,956.13 </td>
+  </tr>
+</tbody>
+</table>
+
 ## Creating an Adjusted Schedule
 
 Next, we will create an adjusted schedule that accounts for both extra monthly and one-time payments towards principal.  With these extra payments, the principal will be paid off before the full term of the loan, and you will therefore pay less interest.
@@ -720,7 +749,7 @@ both_schedules %>%
   guides(linetype = guide_legend(override.aes = list(col = "red")))
 ```
 
-<img src="/post/amortization_calculator/initial_post/index_files/figure-html/unnamed-chunk-10-1.png" width="672" />
+<img src="/post/amortization_calculator/initial_post/index_files/figure-html/unnamed-chunk-11-1.png" width="672" />
 
 
 Stay tuned for my next post that will wrap the work done here into a Shiny App.

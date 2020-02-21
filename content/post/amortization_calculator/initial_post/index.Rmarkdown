@@ -1,5 +1,5 @@
 ---
-title: Creating an Amortization Calculator in R
+title: Amortization CalculatoR
 author: Spencer Schien
 date: ''
 slug: creating-amortization-tables-in-r
@@ -9,7 +9,7 @@ tags:
   - Shiny
   - Rmarkdown
   - R
-subtitle: ''
+subtitle: 'How to Build Amortization Tables in R'
 summary: 'Learn how to build an amortization calculator in R.'
 authors: []
 lastmod: '2020-02-09T21:35:57-06:00'
@@ -21,7 +21,7 @@ image:
 projects: []
 math: true
 ---
-```{r}
+```{r include=FALSE}
 knitr::opts_chunk$set(message=FALSE, warning=FALSE)
 ```
 
@@ -209,6 +209,16 @@ standard_schedule %>%
 ```
 
 Now when we look at the 153rd payment, we see the date is `r standard_schedule[153, 1] %>% modify(format, "%B %d, %Y")`.
+
+```{r}
+standard_schedule %>%
+  filter(interest < principal) %>%
+  head(1) %>%
+  modify_at(c("interest", "principal", "balance"), scales::dollar,
+            largest_with_cents = 1e+6) %>%
+  kable(booktabs = T) %>%
+  kable_styling()
+```
 
 ## Creating an Adjusted Schedule
 
