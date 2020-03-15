@@ -7,8 +7,8 @@ categories:
   - Interview Case Study
 tags: []
 subtitle: ''
-summary: ''
-authors: []
+summary: 'First in of three posts on a case study I completed as part of a Data Scientist interview process.'
+authors: [admin]
 lastmod: '2020-03-14T16:20:09-05:00'
 featured: no
 image:
@@ -22,8 +22,8 @@ This is a recreation of a case-study I was asked to complete to showcase my tech
 
 In addition to this post that includes the case study prompt, this project included two other posts:
 
-1. [Full Case Study Documentation](https://spencerschien.info/post/interview_case_study/analysis/)
-1. [Recommendation to Leadership](https://spencerschien.info/post/interview_case_study/recommendation/)
+1. [Full Case Study Documentation](https://spencerschien.info/post/interview_case_study/analysis/) -- This is the detailed documentation of methodology and analysis.
+1. [Recommendation to Leadership](https://spencerschien.info/post/interview_case_study/recommendation/) -- This is the final recommendation, as would be presented to executive leadership.
 
 ## The Prompt
 

@@ -1,5 +1,5 @@
 ---
-title: "Milwaukee Traffic Accident Tracking #1"
+title: "Milwaukee Traffic Accident Tracking"
 author: Spencer Schien
 date: '2019-10-02'
 slug: accident-tracking
@@ -36,6 +36,7 @@ We can further evaluate whether any subgroups of the data showed any change (e.g
 ## Loading and Assessing the Data
 
 First things first, we need to get the data into R.
+
 ```{r}
 library(tidyverse)
 
@@ -171,4 +172,3 @@ d_point_v <-labeled %>%
 d_point_v
 ```
 
-More to come...

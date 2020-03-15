@@ -7,8 +7,8 @@ categories:
   - Interview Case Study
 tags: []
 subtitle: ''
-summary: ''
-authors: []
+summary: 'Second of three posts on a case study I completed as part of a Data Scientist interview process.'
+authors: [admin]
 lastmod: '2020-03-14T17:18:25-05:00'
 featured: no
 image:

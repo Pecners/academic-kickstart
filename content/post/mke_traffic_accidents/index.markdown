@@ -1,5 +1,5 @@
 ---
-title: "Milwaukee Traffic Accident Tracking #1"
+title: "Milwaukee Traffic Accident Tracking"
 author: Spencer Schien
 date: '2019-10-02'
 slug: accident-tracking
@@ -35,6 +35,7 @@ We can further evaluate whether any subgroups of the data showed any change (e.g
 
 First things first, we need to get the data into R.
 
+
 ```r
 library(tidyverse)
 
@@ -49,11 +50,11 @@ glimpse(raw)
 ```
 
 ```
-## Observations: 158,729
+## Observations: 160,784
 ## Variables: 3
-## $ CASENUMBER  <chr> "J9L1HS26QB", "J9L0MQKRFN", "J9L121PTNV", "J9L0JDKRSS",...
-## $ CASEDATE    <dttm> 2020-01-28 19:10:00, 2020-01-28 17:54:00, 2020-01-28 1...
-## $ ACCIDENTLOC <chr> "W FOND DU LAC AV & Highway CRO", "N 33RD ST & W MICHIG...
+## $ CASENUMBER  <chr> "M5L0GD2Z4Q", "J9L0K2BCJQ", "J9L01R2L2P", "J9L014K17L",...
+## $ CASEDATE    <dttm> 2020-03-11 16:10:00, 2020-03-10 19:38:00, 2020-03-10 1...
+## $ ACCIDENTLOC <chr> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA,...
 ```
 
 With only three variables, this is a pretty simple dataset.  It would seem that `CASENUMBER` is a unique identifier, `CASEDATE` is a timestamp, and `ACCIDENTLOC` is a rough address of the accident.  The addresses are not in a plottable format, nor are they easily coerceable to a Coordinate Reference System (CRS), so effectively, this variable is useless for our purposes.
@@ -177,7 +178,7 @@ d_hist_v <-labeled %>%
 d_hist_v
 ```
 
-<img src="/post/mke_traffic_accidents/2019-10-02-accident-tracking_files/figure-html/unnamed-chunk-8-1.png" width="672" />
+<img src="/post/mke_traffic_accidents/index_files/figure-html/unnamed-chunk-8-1.png" width="672" />
 
 I like to assign my visuals with a name ending in `_v` so I can easily search them--this can be super helpful on larger projects where you are creating a lot of visuals.
 
@@ -190,7 +191,7 @@ d_hist_v +
   labs(x ="", y= "Daily Count of Accidents", title = "Milwaukee Traffic Accident Reports")
 ```
 
-<img src="/post/mke_traffic_accidents/2019-10-02-accident-tracking_files/figure-html/unnamed-chunk-9-1.png" width="672" />
+<img src="/post/mke_traffic_accidents/index_files/figure-html/unnamed-chunk-9-1.png" width="672" />
 
 There seems to be positive trend in the number of accident reports, and there also seem to be a few pretty extreme spikes, but the histogram bars are so thin that it's difficult to make out.  
 
@@ -224,6 +225,5 @@ d_point_v <-labeled %>%
 d_point_v
 ```
 
-<img src="/post/mke_traffic_accidents/2019-10-02-accident-tracking_files/figure-html/unnamed-chunk-10-1.png" width="672" />
+<img src="/post/mke_traffic_accidents/index_files/figure-html/unnamed-chunk-10-1.png" width="672" />
 
-More to come...
