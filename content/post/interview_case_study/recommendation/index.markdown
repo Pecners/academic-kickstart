@@ -7,7 +7,7 @@ categories:
   - Interview Case Study
 tags: []
 subtitle: ''
-summary: 'Spencer of three posts on a case study I completed as part of a Data Scientist interview process.'
+summary: 'Third of three posts on a case study I completed as part of a Data Scientist interview process.'
 authors: [admin]
 lastmod: '2020-03-14T17:54:00-05:00'
 featured: no
