@@ -15,7 +15,7 @@ image:
 links:
 - icon: 
   icon_pack: fab
-  name: Follow
+  name: Follow 
   url: 
 url_code: ""
 url_pdf: ""
