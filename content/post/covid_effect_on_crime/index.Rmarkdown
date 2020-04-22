@@ -1,0 +1,107 @@
+---
+title: The Effect of `Safer At Home` on Crime in Milwaukee
+author: admin
+date: '2020-04-21'
+slug: the-effect-of-safer-at-home-on-crime-in-milwaukee
+categories:
+  - Milwaukee
+tags: []
+subtitle: ''
+summary: ''
+authors: []
+lastmod: '2020-04-21T15:00:09-05:00'
+featured: no
+image:
+  caption: ''
+  focal_point: ''
+  preview_only: no
+projects: []
+draft: true
+---
+
+```{r setup}
+knitr::opts_chunk(message = FALSE, warning = FALSE)
+library(tidyverse)
+library(milwaukeer)
+library(lubridate)
+
+crime_current <- read_csv("https://data.milwaukee.gov/dataset/e5feaad3-ee73-418c-b65d-ef810c199390/resource/87843297-a6fa-46d4-ba5d-cb342fb2d3bb/download/wibr.csv") %>%
+  modify_at("IncidentNum", as.character)
+crime_past <- read_csv("https://data.milwaukee.gov/dataset/5a537f5c-10d7-40a2-9b93-3527a4c89fbd/resource/395db729-a30a-4e53-ab66-faeb5e1899c8/download/wibrarchive.csv")
+
+crime <- bind_rows (crime_current, crime_past)
+
+long_crime <- crime %>%
+  pivot_longer(cols = c(15:24), names_to = "crime", values_to = "indicator") %>%
+  filter(indicator == 1 & ReportedYear > 2018)
+```
+
+
+```{r}
+long_crime %>%
+  group_by(ReportedYear, ReportedMonth, crime) %>%
+  summarise(total = sum(indicator)) %>%
+  filter(ReportedMonth <= 4) %>%
+  modify_at("ReportedYear", factor) %>%
+  pivot_wider(names_from = ReportedYear, values_from = total) %>%
+  mutate(per_last_year = `2020` / `2019`) %>%
+  ggplot(aes(ReportedMonth, per_last_year)) +
+  geom_hline(yintercept = 1, color = "red") +
+  geom_col() +
+  theme_minimal() +
+  facet_wrap(~ crime) +
+  scale_y_continuous(labels = scales::percent)
+```
+
+```{r}
+today <- crime %>%
+  pivot_longer(cols = c(15:24), names_to = "crime", values_to = "indicator") %>%
+  filter(ReportedYear < 2020) %>%
+  mutate(year_day = yday(ReportedDateTime)) %>%
+  group_by(crime, year_day, ReportedYear) %>%
+  summarise(day_total = sum(indicator)) %>%
+  ungroup() %>%
+  group_by(crime, ReportedYear) %>%
+  mutate(cum_ann_total = cumsum(day_total)) %>%
+  filter(year_day == yday(ymd(Sys.Date()))) %>%
+  select(-c(day_total, year_day),
+         today_total = cum_ann_total)
+  
+year_days <- crime %>%
+  pivot_longer(cols = c(15:24), names_to = "crime", values_to = "indicator") %>%
+  mutate(year_day = yday(ReportedDateTime)) %>%
+  filter(ReportedYear < 2020 & year_day <= yday(ymd(Sys.Date()))) %>%
+  group_by(crime, year_day, ReportedYear) %>%
+  summarise(day_total = sum(indicator)) %>%
+  ungroup() %>%
+  group_by(crime, ReportedYear) %>%
+  mutate(cum_ann_total = cumsum(day_total),
+         final_ann_total = max(cum_ann_total)) %>%
+  left_join(., today)
+
+this_year <- crime %>%
+  pivot_longer(cols = c(15:24), names_to = "crime", values_to = "indicator") %>%
+  mutate(year_day = yday(ReportedDateTime)) %>%
+  filter(ReportedYear == 2020) %>%
+  group_by(crime, year_day, ReportedYear) %>%
+  summarise(day_total = sum(indicator)) %>%
+  ungroup() %>%
+  group_by(crime, ReportedYear) %>%
+  mutate(cum_ann_total = cumsum(day_total),
+         final_ann_total = max(cum_ann_total))
+
+crime %>%
+  pivot_longer(cols = c(15:24), names_to = "crime", values_to = "indicator") %>%
+  filter(ReportedYear == 2020) %>%
+  mutate(year_day = yday(ReportedDateTime)) %>%
+  group_by(crime, year_day, ReportedYear) %>%
+  summarise(day_total = sum(indicator)) %>%
+  ungroup() %>%
+  group_by(crime, ReportedYear) %>%
+  mutate(cum_ann_total = cumsum(day_total)) %>%
+  filter(year_day == max(year_day))
+
+model <- lm(today_total ~ cum_ann_total+year_day, data = year_days %>% filter(crime == "Homicide"))
+summary(model)
+prediction <- predict(model, this_year %>% filter(crime == "Homicide"), interval = "confidence")
+```
