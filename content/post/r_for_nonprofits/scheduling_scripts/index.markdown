@@ -1,0 +1,59 @@
+---
+title: Schedule R Scripts with Windows 10 Task Scheduler
+author: admin
+date: '2020-07-28'
+slug: scheduling_scripts
+categories:
+  - R for Nonprofits
+tags:
+  - R
+  - Workflow
+subtitle: ''
+summary: ''
+authors: []
+lastmod: '2020-07-28T16:28:31-05:00'
+featured: no
+image:
+  caption: ''
+  focal_point: ''
+  preview_only: no
+projects: []
+draft: true
+---
+
+{{% alert note %}}
+The posts in the *R for Nonprofits* series are written for the R user who doesn't have computer science or coding background before R.
+{{% /alert %}}
+
+Here's a common scenario -- you write an Rmarkdown report that will need to be rendered at regular intervals as the underlying data is updated.  In my role, this happens a lot with forms.  We put out A LOT of forms to survey participants in our programs, get feedback on our services, etc.  Some of these surveys may stay live for the entire year, while others have a very specific timeline, and in both cases, it is beneficial to run the R script that compiles the results into a report at regular intervals.
+
+If you're on a Windows machine like I am (specifically Windows 10), a little bit of Googling will lead you to the Windows Task Scheduler (and also the `taskscheduleR` package, to be discussed below).  Task Scheduler allows you to schedule tasks (e.g. running an R script) with a range of settings.
+
+Now, full disclosure: I stumbled my way through Task Scheduler before I learned of the `taskscheduleR` package, and so I will treat the two in that order. This also makes sense because  `taskscheduleR` is doing the same thing, just within RStudio.
+
+## Getting Set Up
+
+To begin, let's create a reproducible example so we can walk through the process with the same code. Probably the easiest way to do this is to create a log that records every time the script runs.
+
+First, we will want to set up a project directory with the following steps:
+
+1. Within RStudion, choose File > New Project.
+1. Select New Directory.
+1. Select New Project.
+1. Enter a *Directory name:* -- this will be the folder name. For consistency I'm going to use `task_scheduler_example`, which I will reference throughout this post.
+
+If you were successful, RStudio should have opened up a fresh session for you with an empty environment and a *Files* tab with a single item, `task_scheduler_example.Rproj`.
+
+{{% alert note %}}
+When I was getting started, I didn't organize my work into Projects, and it bit me in the end.  Don't make the same mistake.  Organize your work with Projects (and also Git, but more on that in future posts).
+{{% /alert %}}
+
+## The Task Scheduler Way
+
+
+
+```r
+run_time <- Sys.time()
+```
+
+## The *taskscheduleR* Way
