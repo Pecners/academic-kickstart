@@ -8,7 +8,7 @@ categories:
 tags:
   - R
 subtitle: ''
-summary: ''
+summary: 'Initial post in the R for Nonprofits series.'
 authors: []
 lastmod: '2020-07-06T14:35:14-05:00'
 featured: no
