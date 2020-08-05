@@ -9,7 +9,7 @@ tags:
   - R
   - Workflow
 subtitle: ''
-summary: ''
+summary: 'Automate reporting and other tasks by scheduling your scripts on Windows with Task Scheduler.'
 authors: []
 lastmod: '2020-07-28T16:28:31-05:00'
 featured: no
@@ -23,7 +23,7 @@ draft: false
 
 
 {{% alert note %}}
-The posts in the *R for Nonprofits* series are written for the R user who doesn't have computer science or coding background before R.  If you have more coding experience, you might find some of the explanations or details herein redundent and/or superfluous.
+The posts in the *R for Nonprofits* series are written for the R user who doesn't have computer science or coding background before R.  If you have more coding experience, you might find some of the explanations or details herein overly basic.
 {{% /alert %}}
 
 Here's a common scenario -- you write an Rmarkdown report that will need to be rendered at regular intervals as the underlying data is updated.  In my role, this happens a lot with forms.  We put out A LOT of forms to survey participants in our programs, get feedback on our services, etc.  Some of these surveys may stay live for the entire year, while others have a very specific timeline, and in both cases, it is beneficial to run the R script that compiles the results into a report at regular intervals.
@@ -35,6 +35,10 @@ Full disclosure: I stumbled my way through Task Scheduler before I learned of th
 ## Getting Set Up
 
 To begin, let's create a reproducible example so we can walk through the process with the same code. 
+
+{{% alert note %}}
+You can find the sample directory I created with example code [here](https://github.com/Pecners/task_scheduler_example).
+{{% /alert %}}
 
 First, we will want to set up a project directory with the following steps:
 
