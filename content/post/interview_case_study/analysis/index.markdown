@@ -14,7 +14,7 @@ featured: no
 image:
   caption: ''
   focal_point: ''
-  preview_only: no
+  preview_only: yes
 projects: []
 ---
 
@@ -260,8 +260,8 @@ glimpse(cos)
 ```
 
 ```
-## Observations: 49,935
-## Variables: 15
+## Rows: 49,935
+## Columns: 15
 ## $ amount           <dbl> 205220.94, 439211.78, 225424.40, 680839.15, 362518...
 ## $ N                <dbl> 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 4,...
 ## $ years_extended   <dbl> 6, 4, 2, 2, 2, 3, 3, 2, 4, 1, 3, 3, 2, 1, 3, 4, 3,...
