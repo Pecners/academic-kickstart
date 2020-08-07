@@ -1,5 +1,5 @@
 ---
-title: Getting Started with R for Nonprofits
+title: R for Nonprofits
 author: admin
 date: '2020-07-06'
 slug: getting-started-with-r-for-nonprofits
