@@ -197,6 +197,10 @@ My greatest source of frustration in scheduling tasks by far had been identifyin
 
 Debugging can be difficult because when you are working with your script in RStudio, you aren't replicating the environment in which the script will run.  To do that, we need to understand that Task Scheduler basically just runs scripts as we would from Command Prompt.  So, my first step when I get the `(0x1)` error would be to to run the script from there, rather than diving back into my R code to try and figure it out.  
 
+{{% alert note %}}
+You can find a helpful reference list of result codes on [Wikipedia](https://en.wikipedia.org/wiki/Windows_Task_Scheduler#Column_'Last_Result').
+{{% /alert %}}
+
 #### Run R Script from Command Prompt
 
 To run a script from Command Prompt, pull up Command Prompt by searching for it as we did with Task Scheduler.  If you're new to Command Prompt, don't worry, this will be simple.  We are going to run two lines of code and examine the output.  These two lines will be the following:
