@@ -133,7 +133,7 @@ elbow_df %>%
   labs(title = "Elbow Method: Total Within-Cluster Sum of Square")
 ```
 
-<img src="/post/2020-01-27-cluster-analysis-of-milwaukee-k12-schools_files/figure-html/unnamed-chunk-5-1.png" width="672" />
+<img src="/post/cluster_analysis_k12_schools/2020-01-27-cluster-analysis-of-milwaukee-k12-schools_files/figure-html/unnamed-chunk-5-1.png" width="672" />
 
 The elbow we are looking for is located at 3 clusters -- this elbow tells us that adding another cluster does not decrease the total WSS much more.
 
@@ -164,7 +164,7 @@ sil_df %>%
   labs(title = "Average Silhouette Method")
 ```
 
-<img src="/post/2020-01-27-cluster-analysis-of-milwaukee-k12-schools_files/figure-html/unnamed-chunk-6-1.png" width="672" />
+<img src="/post/cluster_analysis_k12_schools/2020-01-27-cluster-analysis-of-milwaukee-k12-schools_files/figure-html/unnamed-chunk-6-1.png" width="672" />
 
 Whereas with the elbow method we were trying to minimize the total WSS, here we are aiming to maximize the silhouette width.  As the visual above portrays, the maximum value is found at `k = 4`, but `k = 3` is a close second.
 
@@ -260,45 +260,45 @@ c_demo %>%
 <tbody>
   <tr>
    <td style="text-align:left;"> 1 </td>
-   <td style="text-align:right;"> 28 </td>
-   <td style="text-align:left;"> 11.5% </td>
-   <td style="text-align:left;"> 24.4% </td>
-   <td style="text-align:left;"> 21.2% </td>
-   <td style="text-align:left;"> 36.9% </td>
-   <td style="text-align:left;"> 61.5% </td>
-   <td style="text-align:left;"> 8.7% </td>
-   <td style="text-align:left;"> 8.3% </td>
-   <td style="text-align:right;"> 74.1 </td>
-   <td style="text-align:right;"> 50.4 </td>
-   <td style="text-align:right;"> 74.1 </td>
+   <td style="text-align:right;"> 102 </td>
+   <td style="text-align:left;"> 5.3% </td>
+   <td style="text-align:left;"> 17.3% </td>
+   <td style="text-align:left;"> 58.0% </td>
+   <td style="text-align:left;"> 15.7% </td>
+   <td style="text-align:left;"> 77.4% </td>
+   <td style="text-align:left;"> 12.2% </td>
+   <td style="text-align:left;"> 19.7% </td>
+   <td style="text-align:right;"> 71.9 </td>
+   <td style="text-align:right;"> 44.5 </td>
+   <td style="text-align:right;"> 71.4 </td>
   </tr>
   <tr>
    <td style="text-align:left;"> 2 </td>
-   <td style="text-align:right;"> 150 </td>
-   <td style="text-align:left;"> 2.0% </td>
-   <td style="text-align:left;"> 86.7% </td>
-   <td style="text-align:left;"> 5.2% </td>
-   <td style="text-align:left;"> 2.9% </td>
-   <td style="text-align:left;"> 84.7% </td>
-   <td style="text-align:left;"> 15.1% </td>
-   <td style="text-align:left;"> 1.2% </td>
-   <td style="text-align:right;"> 62.9 </td>
-   <td style="text-align:right;"> 24.6 </td>
-   <td style="text-align:right;"> 65.0 </td>
+   <td style="text-align:right;"> 23 </td>
+   <td style="text-align:left;"> 11.2% </td>
+   <td style="text-align:left;"> 28.0% </td>
+   <td style="text-align:left;"> 23.3% </td>
+   <td style="text-align:left;"> 32.3% </td>
+   <td style="text-align:left;"> 64.5% </td>
+   <td style="text-align:left;"> 10.3% </td>
+   <td style="text-align:left;"> 7.7% </td>
+   <td style="text-align:right;"> 73.5 </td>
+   <td style="text-align:right;"> 49.2 </td>
+   <td style="text-align:right;"> 73.3 </td>
   </tr>
   <tr>
    <td style="text-align:left;"> 3 </td>
-   <td style="text-align:right;"> 116 </td>
-   <td style="text-align:left;"> 5.0% </td>
-   <td style="text-align:left;"> 16.8% </td>
-   <td style="text-align:left;"> 55.3% </td>
-   <td style="text-align:left;"> 19.1% </td>
-   <td style="text-align:left;"> 74.1% </td>
-   <td style="text-align:left;"> 10.9% </td>
-   <td style="text-align:left;"> 17.6% </td>
-   <td style="text-align:right;"> 71.7 </td>
-   <td style="text-align:right;"> 45.0 </td>
-   <td style="text-align:right;"> 71.2 </td>
+   <td style="text-align:right;"> 147 </td>
+   <td style="text-align:left;"> 2.0% </td>
+   <td style="text-align:left;"> 86.6% </td>
+   <td style="text-align:left;"> 5.2% </td>
+   <td style="text-align:left;"> 2.9% </td>
+   <td style="text-align:left;"> 85.2% </td>
+   <td style="text-align:left;"> 15.2% </td>
+   <td style="text-align:left;"> 1.3% </td>
+   <td style="text-align:right;"> 62.7 </td>
+   <td style="text-align:right;"> 24.4 </td>
+   <td style="text-align:right;"> 64.7 </td>
   </tr>
 </tbody>
 </table>
