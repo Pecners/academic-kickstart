@@ -13,7 +13,7 @@ featured: no
 image:
   caption: ''
   focal_point: ''
-  preview_only: no
+  preview_only: yes
 projects: []
 share: false
 reading_time: false
