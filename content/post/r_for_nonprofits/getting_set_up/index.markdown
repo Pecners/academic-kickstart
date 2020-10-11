@@ -18,7 +18,7 @@ image:
   focal_point: ''
   preview_only: yes
 projects: []
-draft: true
+draft: false
 ---
 
 ### Goals for this Post
@@ -29,8 +29,6 @@ In this post, I intend to offer recommendations and resources so the reader can 
 
 1. Successfully download R and RStudio.
 1. Get started down an effective learning path.
-1. Get started writing reports with RMarkdown.
-1. Implement a version control workflow with Git.
 
 For the more experienced useR, these will be pretty basic recommendations.  For those totally new to R and those who have just started to get their feet wet, I hope this post will speed up the learning and implementation process while helping to avoid some pitfalls that tripped me up when I was just getting started.
 
@@ -60,7 +58,7 @@ To download RStudio, navigate to [https://rstudio.com/](https://rstudio.com/) an
 
 Click the provided download link, and follow the necessary process to install the software for your system.
 
-**PRO TIP**: Once you've downloaded and opened RStudio for the first time, change your theme by going to Tools > Global Options > Appearance.  Even if you're new to programming, you've undoubtedly seen the screen of software developers where text is highlighted and the background is dark.  You can play around with different settings to find one you like.  It's easier on the eyes and helps you follow your own code more easily.
+**PRO TIP**: Once you've downloaded and opened RStudio for the first time, change your theme by going to Tools > Global Options > Appearance.  Even if you're new to coding, you've undoubtedly seen the screen of software developers where text is highlighted and the background is dark.  You can play around with different settings to find one you like.  It's easier on the eyes and helps you follow your own code more easily.
 
 ### Recommended Learning Resources
 
@@ -72,4 +70,26 @@ For anyone just getting started in R, my first piece of advice is to start with 
 
 When you initially download R, you get what is known as *base R* -- the standard set of functions, data types, syntax, etc. that make up the language.  To avoid getting lost in the weeds, suffice it to say base R is powerful, but it is not particularly easy to learn, especially if you are unfamiliar with standard programming conventions.  Furthermore, many introductory R courses are statistics courses that use R (i.e. base R), and as such they focus more on the statistics than the language.  The result is a language that is not particularly learner-friendly both in the way it's written and the conventional way it's taught.
 
-Enter the Tidyverse suite of packages.
+Enter the [Tidyverse](https://www.tidyverse.org/) suite of packages. Per it's own documentation, "The tidyverse is an opinionated collection of R packages designed for data science.  All packages share an underlying design philosophy, grammar, and data data structures." In my experience, the process of data cleaning and transformation was maddeningly enigmatic in base R, and it was difficult to find solutions to problems I encountered. Conversely, the tidyverse packages are intended to be more intuitive for the coder, and there is ample documentation for how to use the packages.
+
+The tidyverse's original author was Hadley Wickham, and you would do well to remember the name as you will undoubtedly run into references to Hadley in Stack Overflow solutions as his [tidy data](https://vita.had.co.nz/papers/tidy-data.pdf) philosophy and R programming conventions have become fairly standard practice.
+
+Practically speaking, to get started learning R with the Tidyverse, you could either search out online learning modules that the teach you the packages, or you work your way through Hadley's book, [R for Data Science](https://r4ds.had.co.nz/).
+
+Once you are feeling more comfortable and confident, you will probably start branching out with your own projects, and your learning will snowball organically.  If you want to continue a more formal approach to your R learning journey and you enjoyed *R for Data Science*, you can move on to one of Hadley's other books, such as [Advanced R](https://adv-r.hadley.nz/index.html) or [R Packages](https://r-pkgs.org/).
+
+You'll know you're getting somewhere when this genuinely makes you laugh:
+
+{{< figure src="img/hadley_meme.png" width="50%" >}}
+
+##### Build Your Computer Science Foundation
+
+Once you've gotten your feet wet with R, you will most likely find it beneficial to learn some computer science basics. R is a high-level programming language, which means a lot is abstracted to make it easier for you the human to write commands and interact with the computer.  Learning data structures, syntax, and conventions of lower-level languages (e.g. C) will give you a more intuitive understanding of how R works. For instance, navigating the file systems, understanding data structures, and learning concepts such as object oriented design will make you a more productive and skilled programmer in general.
+
+Personally, I have found Harvard's [CS50](https://cs50.harvard.edu/x/2020/) course to be a great resource in this area.  Full disclosure, if you look to complete 100% of the course by watching all the videos and earning 100% on all the assignements, it will be a massive investment of time and energy.  My own approach has been to slowly work my way through the lectures and problem sets at my own pace without pressuring myself to be totally thorough -- anything I've taken from the course has been icing on the cake and helped me improve my own code.
+
+### Conclusion
+
+I hope this post is instructive for those without much of a computer science background but who are nonetheless interested in leveraging the power of R in their work. All of my advice and guidance herein is presented as I believe would have helped me when I was just getting started, and I certainly understand that it might not be for everyone.
+
+If you have any feedback, questions, or suggestions, feel free to email me.  Otherwise, stay tuned for more posts in my *R for Nonprofits* series.
