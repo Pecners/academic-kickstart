@@ -17,6 +17,7 @@ image:
   focal_point: ''
   preview_only: no
 projects: []
+draft: true
 ---
 
 {{% alert note %}}
