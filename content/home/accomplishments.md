@@ -27,12 +27,22 @@ date_format = "Jan 2006"
   date_start = "2018-12-01"
   date_end = "2019-05-19"
   description = "Track entailed 22 courses (estimated 90+ hours) that combined statistical and machine learning techniques with R programming to analyze and interpret data."
+  
+[[item]]
+  organization = "Salesforce"
+  organization_url = "https://salesforce.com/"
+  title = "Salesforce Certified Platform Developer I"
+  url = "https://trailblazer.me/id/sschien"
+  certificate_url = "https://trailhead.salesforce.com/credentials/verification"
+  date_start = "2021-05-07"
+  date_end = ""
+  description = "Use my legal first name (i.e. search *Jonathan Schien*) to verify this credential"
 
 [[item]]
   organization = "Salesforce"
   organization_url = "https://salesforce.com/"
   title = "Salesforce Certified Administrator"
-  url = "https://www.datacamp.com/tracks/data-scientist-with-r"
+  url = "https://trailblazer.me/id/sschien"
   certificate_url = "https://trailhead.salesforce.com/credentials/verification"
   date_start = "2019-02-01"
   date_end = ""
