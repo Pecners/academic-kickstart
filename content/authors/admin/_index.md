@@ -22,10 +22,11 @@ bio: This is my bio.  There are many like it, but this one is mine.
 
 interests:
 - R Development
+- Salesforce Development
 - Web Development
+- Data Engineering/Database Design
 - Machine Learning
 - Data Visualization
-- Data for Good
 
 education:
   courses:
@@ -63,8 +64,8 @@ user_groups:
 - Visitors
 ---
 
-I'm a data enthusiast passionate about leveraging the power of data science for the social good.
+Hi there, I'm Spencer. I enjoy leveraging technology and data to drive better outcomes, especially for nonprofit, mission-driven organizations that face greater resource limitations than typical for-profit entities. 
 
-I've found my way to this work through an unconventional path--though a Political Science/French major in undergrad, my aptitude for analytics led me to be the de facto data analyst from the start of my professional career.  I'm now in a role dedicated to data management and analysis, and it has been in this capacity that I've pushed myself to bring the ever-more-attainable power of data science to my small organization here in Milwaukee.
+I have extensive experience in the nonprofit/NGO ecosystem, including a stint as a Peace Corps volunteer in Senegal. My deepest expertise is in the R programming language and Salesforce development, so my posts here will focus mainly on those two subjects.
 
-I count myself fortunate to have discovered a true passion for the work I'm doing.  Data science offers me the opportunity to add value through creative and analytical problem-solving, as well as the opportunity to build the capacity of my team.
+This website is meant to showcase tools and techniques that have benefited me and my organization in managing data and leveraging technology. Nearly everything discussed here is built on open-source resources, so the main barrier for adoptions is intellectual rather than financial capital. My posts here should provide a leg-up in building that intellectual capital.
