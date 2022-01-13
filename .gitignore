@@ -3,3 +3,4 @@ public/
 .Rproj.user
 *.csv
 .DS_Store
+themes/.DS_Store
