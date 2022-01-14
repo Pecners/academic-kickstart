@@ -17,8 +17,8 @@ image:
 projects: []
 draft: true
 ---
-
-# TL;DR 
+ 
+# TL;DR
 
 * I used R to access the OpenStreetMap API and create a minimalist street map of Milwaukee, WI
 * After I made the city map, I thought it would be cool to make one for each distinct neighborhood
@@ -26,7 +26,7 @@ draft: true
 
 ## Introduction
 
-I'm sure you've seen city maps that only include minimalist features, with simple lines representing streets, and that's it -- no labels, no coloring, no borders, just the streets. These are more works of art than functional maps, but I think they're pretty cool. So of course when I discovered the [osmdata](https://github.com/ropensci/osmdata) package in R, my first thought was, *I wonder if I can make one of those street maps for Milwaukee.*
+I'm sure you've seen city maps that only include minimalist features, with simple lines representing streets, and that's it -- no labels, no coloring, no borders, just the streets. These are more works of art than functional maps, but I think they're pretty cool. So of course when I discovered the [osmdata](https://github.com/ropensci/osmdata) package in R, my first thought was, *I wonder if I can make one of those street maps for Milwaukee.* 
 
 ![Milwaukee Streets](https://raw.githubusercontent.com/Pecners/milwaukee_streets/master/Milwaukee%20City%20Streets.svg)
 

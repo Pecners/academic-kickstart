@@ -7,3 +7,5 @@ themes/.DS_Store
 .RData
 .Rhistory
 Thumbs.db
+.hugo_build.lock
+/resources/
