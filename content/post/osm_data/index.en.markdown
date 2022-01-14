@@ -42,36 +42,11 @@ After reviewing the OSM documentation, we see there are many levels of street fe
 ```r
 # We'll be using several {tidyverse} packages throughout
 library(tidyverse)
-```
 
-```
-## ── Attaching packages ─────────────────────────────────────── tidyverse 1.3.1 ──
-```
-
-```
-## ✓ ggplot2 3.3.5     ✓ purrr   0.3.4
-## ✓ tibble  3.1.6     ✓ dplyr   1.0.7
-## ✓ tidyr   1.1.4     ✓ stringr 1.4.0
-## ✓ readr   2.1.1     ✓ forcats 0.5.1
-```
-
-```
-## ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
-## x dplyr::filter() masks stats::filter()
-## x dplyr::lag()    masks stats::lag()
-```
-
-```r
 # If you havn't installed the {osmdata} package yet, 
 # run `install.packages("osmdata")`
 library(osmdata)
-```
 
-```
-## Data (c) OpenStreetMap contributors, ODbL 1.0. https://www.openstreetmap.org/copyright
-```
-
-```r
 # Query motorway data with bounding box set around "Milwaukee, WI"
 motorways_mke <- opq("Milwaukee, WI") %>%
   add_osm_feature(key = "highway", value = "motorway") %>%

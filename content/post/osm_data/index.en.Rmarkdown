@@ -38,7 +38,7 @@ The first step in this process is to read the data into R. As I stated above, I'
 
 After reviewing the OSM documentation, we see there are many levels of street features, including motorways, primary roads, residential roads, etc. It might not be intuitive at first what the difference in all these features looks like, so lets get plotting. We'll start with the highest level -- motorways.
 
-```{r motorway_plot}
+```{r motorway_plot, message=FALSE, warning=FALSE}
 # We'll be using several {tidyverse} packages throughout
 library(tidyverse)
 
