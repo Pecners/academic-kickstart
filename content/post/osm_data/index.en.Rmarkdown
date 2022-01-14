@@ -1,6 +1,6 @@
 ---
 title: Make Minimalist Street Maps in R
-author: Spencer Schien
+author: admin
 date: '2021-10-04'
 slug: []
 categories: []
@@ -13,12 +13,12 @@ featured: no
 image:
   caption: ''
   focal_point: ''
-  preview_only: no
+  preview_only: yes
 projects: []
 draft: true
 ---
 
-# TL;DR
+# TL;DR 
 
 * I used R to access the OpenStreetMap API and create a minimalist street map of Milwaukee, WI
 * After I made the city map, I thought it would be cool to make one for each distinct neighborhood
