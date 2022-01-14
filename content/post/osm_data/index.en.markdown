@@ -15,6 +15,7 @@ image:
   focal_point: ''
   preview_only: no
 projects: []
+draft: true
 ---
 
 # TL;DR
@@ -138,7 +139,7 @@ links %>%
 
 Aha! What was hard to see in the first plot was that there are actually MANY distinct lines included here, but our line stroke size was too large for that level of discernment.
 
-test
+test test
 {{% alert note %}}
 I think of the `st_intersection` operations as cookie cutters. In our example, you have the cookie dough (all streets in the whole city) rolled out, and then you use a cookie cutter (the distinct neighborhood boundary) to cut only those portions of the streets that fall within the neighborhood.
 {{% /alert %}}

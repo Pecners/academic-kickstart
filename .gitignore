@@ -4,3 +4,5 @@ public/
 *.csv
 .DS_Store
 themes/.DS_Store
+.RData
+.Rhistory
