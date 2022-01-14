@@ -1,4 +1,4 @@
-public/
+/public/
 .idea/
 .Rproj.user
 *.csv
@@ -6,3 +6,4 @@ public/
 themes/.DS_Store
 .RData
 .Rhistory
+Thumbs.db

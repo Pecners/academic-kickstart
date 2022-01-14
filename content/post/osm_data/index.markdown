@@ -53,7 +53,7 @@ motorways_mke <- opq("Milwaukee, WI") %>%
   osmdata_sf()
 ```
 
-After loading the `tidyverse` and `osmdata` packages, we have a few lines of code that makes our query. Let's break it down, line by line:
+After loading the `tidyverse` and `osmdata` packages, we have a few lines of code that makes our query. Let's break it down, line by line: 
 
 * First, `opq("Milwaukee, WI)` sets up our Overpass query. Basically, we stating what our bounding box will be (i.e. Milwaukee), with the bounding box being the limits of data returned. For instance, here we will be pulling all data for motorways withing the Milwaukee area
 * Next, we have `add_osm_feature(key = "highway", value = "motorway")`. OSM data is broken up into key-value designations, with keys having many potential values. Roads fall under the *highway* key, and *motorway* is just one potential value, as we'll see further down.
@@ -76,7 +76,7 @@ lines %>%
   labs(title = "Milwaukee Motorways")
 ```
 
-<img src="{{< blogdown/postref >}}index.en_files/figure-html/motorways_plot-1.png" width="672" />
+<img src="{{< blogdown/postref >}}index_files/figure-html/motorways_plot-1.png" width="672" />
 
 A keen eye will also notice that the lines don't seem to connect cleanly, or at all in some cases. This is because OSM also tracks what it calls *link* highways. For every *value* level that can follow the *highway* key, there is a corresponding *value* for link roads of that level. There is the *motorway* value, for instance, and there is the corresponding *motorwaylink* value. 
 
@@ -94,7 +94,7 @@ links %>%
   labs(title = "Milwaukee Motorway Links")
 ```
 
-<img src="{{< blogdown/postref >}}index.en_files/figure-html/unnamed-chunk-1-1.png" width="672" />
+<img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-1-1.png" width="672" />
 
 Well that's unexpected. There's way more there than would be needed just to connect the motorways, so what's going on? To get a better idea, let's zoom in a bit.
 
@@ -110,7 +110,7 @@ links %>%
   coord_sf(ylim = c(43.00, 43.05), xlim = c(-87.90, -87.95))
 ```
 
-<img src="{{< blogdown/postref >}}index.en_files/figure-html/unnamed-chunk-2-1.png" width="672" />
+<img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-2-1.png" width="672" />
 
 Aha! What was hard to see in the first plot was that there are actually MANY distinct lines included here, but our line stroke size was too large for that level of discernment.
 

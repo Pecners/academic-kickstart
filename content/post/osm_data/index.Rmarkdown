@@ -53,7 +53,7 @@ motorways_mke <- opq("Milwaukee, WI") %>%
   
 ```
 
-After loading the `tidyverse` and `osmdata` packages, we have a few lines of code that makes our query. Let's break it down, line by line:
+After loading the `tidyverse` and `osmdata` packages, we have a few lines of code that makes our query. Let's break it down, line by line: 
 
 * First, `opq("Milwaukee, WI)` sets up our Overpass query. Basically, we stating what our bounding box will be (i.e. Milwaukee), with the bounding box being the limits of data returned. For instance, here we will be pulling all data for motorways withing the Milwaukee area
 * Next, we have `add_osm_feature(key = "highway", value = "motorway")`. OSM data is broken up into key-value designations, with keys having many potential values. Roads fall under the *highway* key, and *motorway* is just one potential value, as we'll see further down.
